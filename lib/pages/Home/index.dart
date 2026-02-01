@@ -14,6 +14,13 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   bool isFirstUse = false; //是否为首次使用
 
+  @override
+  Widget build(BuildContext context) {
+    return isFirstUse
+        ? firstUse()
+        : CustomScrollView(slivers: _getScrollViewSlivers());
+  }
+
   //获取滚动组件
   List<Widget> _getScrollViewSlivers() {
     return [
@@ -39,12 +46,5 @@ class _HomeViewState extends State<HomeView> {
         ),
       ),
     ];
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return isFirstUse
-        ? firstUse()
-        : CustomScrollView(slivers: _getScrollViewSlivers());
   }
 }
