@@ -27,7 +27,13 @@ class _HomeViewState extends State<HomeView> {
           children: List.generate(20, (int index) {
             return Container(
               margin: EdgeInsets.only(bottom: 10),
-              child: shoeOverviewCard(),
+              child: GestureDetector(
+                onTap: () {
+                  //点击卡片跳转到跑鞋详情页
+                  print("跳转到跑鞋${index + 1}详情页");
+                },
+                child: shoeOverviewCard(),
+              ),
             );
           }),
         ),
