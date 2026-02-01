@@ -1,6 +1,7 @@
 // 顶部分类栏组件
 import 'package:flutter/material.dart';
 import 'package:shoecloud/components/Home/normal/addNewShoe.dart';
+import 'package:shoecloud/components/common/clickableWrapper.dart';
 
 // ignore: camel_case_types
 class expandableCategoryBar extends StatefulWidget {
@@ -48,10 +49,8 @@ class _ExpandableCategoryBarState extends State<expandableCategoryBar> {
         runSpacing: 10,
         alignment: WrapAlignment.start, // 左对齐
         children: List.generate(categories.length, (index) {
-          return GestureDetector(
-            onTap: () {
-              print("选择了分类：${categories[index]}");
-            },
+          return clickableWrapper(
+            title: categories[index],
             child: Container(
               height: 36,
               margin: EdgeInsets.symmetric(horizontal: 8, vertical: 10),
