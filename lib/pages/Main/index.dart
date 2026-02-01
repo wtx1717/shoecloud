@@ -16,7 +16,7 @@ class _MainPageState extends State<MainPage> {
   //定义数据，根据数据渲染三个导航
   final List<Map<String, String>> _tabList = [
     {
-      "title": "首页",
+      "title": "鞋库",
       "icon": "lib/assets/bottom_nav/home_normal.png", //正常显示的图标
       "activeIcon": "lib/assets/bottom_nav/home_active.png", //激活显示的图标
     },
