@@ -34,10 +34,12 @@ class _HomeViewState extends State<HomeView> {
       SliverList(
         delegate: SliverChildBuilderDelegate((context, index) {
           return clickableWrapper(
-            title: "跑鞋${index + 1}",
+            route: "shoeInfo",
+            // 将当前卡片的 shoeId 以 Map 形式作为 arguments 传递到详情页，方便扩展更多参数。
+            arguments: {"shoeId": index + 1},
             child: Container(
               margin: EdgeInsets.only(bottom: 10),
-              child: shoeOverviewCard(),
+              child: shoeOverviewCard(shoeId: index + 1),
             ),
           );
         }, childCount: 20),

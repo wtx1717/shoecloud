@@ -1,6 +1,4 @@
-// 添加新跑鞋组件
 import 'package:flutter/material.dart';
-import 'package:shoecloud/components/common/clickableWrapper.dart';
 
 class addNewShoe extends StatefulWidget {
   const addNewShoe({super.key});
@@ -12,13 +10,14 @@ class addNewShoe extends StatefulWidget {
 class _addNewShoeState extends State<addNewShoe> {
   @override
   Widget build(BuildContext context) {
-    return clickableWrapper(
-      route: "addNewShoe",
-      child: Image.asset(
-        width: 50,
-        height: 50,
-        "lib/assets/home/addNewShoe.png",
+    return Scaffold(
+      appBar: AppBar(
+        //该属性可以去掉左上角返回箭头
+        //automaticallyImplyLeading: false,
+        centerTitle: true,
+        title: Text("添加新鞋"),
       ),
+      body: Center(child: Text("这是添加跑鞋页面")),
     );
   }
 }

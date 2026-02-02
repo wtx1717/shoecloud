@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 // ignore: camel_case_types
 class shoeOverviewCard extends StatefulWidget {
-  const shoeOverviewCard({super.key});
+  final int shoeId;
+  const shoeOverviewCard({super.key, required this.shoeId});
 
   @override
   State<shoeOverviewCard> createState() => _shoeOverviewCardState();
@@ -61,7 +62,7 @@ class _shoeOverviewCardState extends State<shoeOverviewCard> {
           children: [
             //名称or昵称
             Text(
-              "Nike Air Zoom Pegasus 39",
+              "Nike Air Zoom Pegasus ${widget.shoeId}",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),

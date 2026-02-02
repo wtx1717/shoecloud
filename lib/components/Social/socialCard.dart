@@ -15,7 +15,7 @@ class socialCard extends StatefulWidget {
 class _socialCardState extends State<socialCard> {
   @override
   Widget build(BuildContext context) {
-    return clickableWrapper(title: widget.title, child: _getSocialCard());
+    return clickableWrapper(route: widget.title, child: _getSocialCard());
   }
 
   Widget _getSocialCard() {

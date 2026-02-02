@@ -46,7 +46,7 @@ class _userInfoState extends State<userInfo> {
                   ),
                   SizedBox(width: 10),
                   clickableWrapper(
-                    title: "编辑个人资料",
+                    route: "编辑个人资料",
                     child: Image.asset(
                       "lib/assets/my/edit.png",
                       height: 20,
@@ -65,7 +65,7 @@ class _userInfoState extends State<userInfo> {
           //将内容推向右侧
           Spacer(),
           clickableWrapper(
-            title: "进入个人首页",
+            route: "进入个人首页",
             child: Container(
               alignment: Alignment.center,
               padding: EdgeInsets.only(right: 40),
