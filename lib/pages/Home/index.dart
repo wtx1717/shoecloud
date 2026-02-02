@@ -30,18 +30,17 @@ class _HomeViewState extends State<HomeView> {
       SliverToBoxAdapter(child: SizedBox(height: 10)),
 
       // 跑鞋概览卡片
-      SliverToBoxAdapter(
-        child: Column(
-          children: List.generate(20, (int index) {
-            return clickableWrapper(
-              title: "跑鞋${index + 1}",
-              child: Container(
-                margin: EdgeInsets.only(bottom: 10),
-                child: shoeOverviewCard(),
-              ),
-            );
-          }),
-        ),
+      // 使用 SliverList 实现懒加载
+      SliverList(
+        delegate: SliverChildBuilderDelegate((context, index) {
+          return clickableWrapper(
+            title: "跑鞋${index + 1}",
+            child: Container(
+              margin: EdgeInsets.only(bottom: 10),
+              child: shoeOverviewCard(),
+            ),
+          );
+        }, childCount: 20),
       ),
     ];
   }
