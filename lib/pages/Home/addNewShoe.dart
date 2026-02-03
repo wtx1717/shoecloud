@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shoecloud/api/home.dart';
+import 'package:shoecloud/viewmodels/home.dart';
 
 class addNewShoe extends StatefulWidget {
   const addNewShoe({super.key});
@@ -8,6 +10,19 @@ class addNewShoe extends StatefulWidget {
 }
 
 class _addNewShoeState extends State<addNewShoe> {
+  List<addShoeInfo> _list = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _getList();
+  }
+
+  void _getList() async {
+    _list = await getAddShoeInfoListAPI();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +32,7 @@ class _addNewShoeState extends State<addNewShoe> {
         centerTitle: true,
         title: Text("添加新鞋"),
       ),
-      body: Center(child: Text("这是添加跑鞋页面")),
+      body: Center(child: Text("添加新鞋")),
     );
   }
 }
