@@ -1,6 +1,6 @@
 // 顶部分类栏组件
 import 'package:flutter/material.dart';
-import 'package:shoecloud/components/Home/normal/addNewShoe.dart';
+import 'package:shoecloud/components/Home/normal/addNewShoeBottom.dart';
 import 'package:shoecloud/components/common/clickableWrapper.dart';
 
 // ignore: camel_case_types
@@ -22,7 +22,7 @@ class _ExpandableCategoryBarState extends State<expandableCategoryBar> {
       //展开折叠列表组件
       child: ExpansionTile(
         expandedAlignment: Alignment.bottomLeft,
-        trailing: addNewShoe(),
+        trailing: addNewShoeBottom(),
         //左上角图标
         title: Image.asset(
           "lib/assets/home/more.png",

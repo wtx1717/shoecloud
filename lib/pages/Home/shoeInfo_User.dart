@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class shoeInfo extends StatefulWidget {
-  const shoeInfo({super.key});
+class shoeInfo_UserView extends StatefulWidget {
+  const shoeInfo_UserView({super.key});
 
   @override
-  State<shoeInfo> createState() => _shoeInfoState();
+  State<shoeInfo_UserView> createState() => _shoeInfo_UserViewState();
 }
 
-class _shoeInfoState extends State<shoeInfo> {
+class _shoeInfo_UserViewState extends State<shoeInfo_UserView> {
   @override
   Widget build(BuildContext context) {
     // 从 ModalRoute 的 settings 中读取命名路由传入的 arguments。
@@ -24,7 +24,13 @@ class _shoeInfoState extends State<shoeInfo> {
 
     return Scaffold(
       appBar: AppBar(title: Text("鞋子详情页面"), centerTitle: true),
-      body: Center(child: Text(shoeId != null ? "鞋子详情页面 - id: $shoeId" : "鞋子详情页面 - 未传入id")),
+      body: SafeArea(
+        child: Center(
+          child: Text(
+            shoeId != null ? "鞋子详情页面 - id: $shoeId" : "鞋子详情页面 - 未传入id",
+          ),
+        ),
+      ),
     );
   }
 }

@@ -2,14 +2,14 @@
 import 'package:flutter/material.dart';
 import 'package:shoecloud/components/common/clickableWrapper.dart';
 
-class addNewShoe extends StatefulWidget {
-  const addNewShoe({super.key});
+class addNewShoeBottom extends StatefulWidget {
+  const addNewShoeBottom({super.key});
 
   @override
-  State<addNewShoe> createState() => _addNewShoeState();
+  State<addNewShoeBottom> createState() => _addNewShoeBottomState();
 }
 
-class _addNewShoeState extends State<addNewShoe> {
+class _addNewShoeBottomState extends State<addNewShoeBottom> {
   @override
   Widget build(BuildContext context) {
     return clickableWrapper(

@@ -1,6 +1,6 @@
 // 首次使用绑定跑鞋组件
 import 'package:flutter/material.dart';
-import 'package:shoecloud/components/Home/normal/addNewShoe.dart';
+import 'package:shoecloud/components/Home/normal/addNewShoeBottom.dart';
 
 class firstUse extends StatefulWidget {
   const firstUse({super.key});
@@ -17,7 +17,7 @@ class _firstUseState extends State<firstUse> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // AddNewShoe组件，放大两倍
-          Transform.scale(scale: 2, child: addNewShoe()),
+          Transform.scale(scale: 2, child: addNewShoeBottom()),
           const SizedBox(height: 20),
           const Text(
             "欢迎使用云鞋库",

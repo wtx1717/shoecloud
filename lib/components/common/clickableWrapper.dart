@@ -17,7 +17,7 @@ class clickableWrapper extends StatefulWidget {
 
   @override
   State<clickableWrapper> createState() => _clickableWrapperState();
-} 
+}
 
 class _clickableWrapperState extends State<clickableWrapper> {
   @override

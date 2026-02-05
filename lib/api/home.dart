@@ -2,7 +2,7 @@
 // 这个文件负责把网络请求得到的原始数据，转换成 viewmodels 中的业务模型，然后返回给 UI 层使用
 import 'package:shoecloud/constants/index.dart';
 import 'package:shoecloud/utils/DioRequest.dart';
-import 'package:shoecloud/viewmodels/home.dart';
+import 'package:shoecloud/viewmodels/addShoeInfo.dart';
 
 /// 获取“新增鞋子信息”列表的 API
 ///
