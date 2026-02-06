@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shoecloud/nfc/bind.dart';
 
 class bindNFCBottom extends StatefulWidget {
   const bindNFCBottom({super.key});
@@ -27,16 +28,21 @@ class _bindNFCBottomState extends State<bindNFCBottom> {
     //点击事件
     return InkWell(
       onTap: () {
-        //弹出底部弹窗（非切换路由）
-        showModalBottomSheet(
-          context: context,
-          //透明背景
-          backgroundColor: Colors.transparent,
-          builder: (BuildContext context) {
-            //弹窗内容
-            return _getShowModalBottomSheet(_screenHeight);
-          },
-        );
+        if (text == "不与NFC绑定") {
+          //关闭当前页面
+          Navigator.pop(context);
+        } else {
+          //弹出底部弹窗（非切换路由）
+          showModalBottomSheet(
+            context: context,
+            //透明背景
+            backgroundColor: Colors.transparent,
+            builder: (BuildContext context) {
+              //弹窗内容
+              return _getShowModalBottomSheet(_screenHeight);
+            },
+          );
+        }
       },
       //按钮样式
       child: Container(
@@ -84,9 +90,12 @@ class _bindNFCBottomState extends State<bindNFCBottom> {
           Spacer(),
 
           GestureDetector(
-            onTap: () {
+            onTap: () async {
               //这里要补充NFC绑定逻辑，即写入NFC的行为
               print("用户要绑定NFC标签了");
+
+              await writeToNFC("12");
+
               //关闭弹窗
               Navigator.pop(context);
             },

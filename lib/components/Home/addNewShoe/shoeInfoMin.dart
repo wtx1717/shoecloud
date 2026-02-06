@@ -29,8 +29,8 @@ class _shoeInfoMinState extends State<shoeInfoMin> {
         children: [
           Image.network(
             widget.imageUrl,
-            height: 130,
-            width: 130,
+            height: 80,
+            width: 80,
             fit: BoxFit.cover,
           ),
           SizedBox(height: 10),

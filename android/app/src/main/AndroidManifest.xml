@@ -1,4 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 向手机添加NFC权限 -->
+    <uses-permission android:name="android.permission.NFC" />
+
     <application
         android:label="shoecloud"
         android:name="${applicationName}"
@@ -24,6 +28,16 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+
+            <!-- 这是负责告诉手机，写入的这个可以打开我的软件 -->
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED"/> 
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="shoecloud" android:host="bind" />
+            </intent-filter>
+
         </activity>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->

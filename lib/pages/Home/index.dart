@@ -42,7 +42,7 @@ class _HomeViewState extends State<HomeView> {
               child: shoeOverviewCard(shoeId: index + 1),
             ),
           );
-        }, childCount: 20),
+        }, childCount: 0),
       ),
     ];
   }

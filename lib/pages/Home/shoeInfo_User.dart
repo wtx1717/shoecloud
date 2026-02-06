@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// 用户查看鞋子详情信息的界面
 class shoeInfo_UserView extends StatefulWidget {
   const shoeInfo_UserView({super.key});
 
@@ -7,19 +8,24 @@ class shoeInfo_UserView extends StatefulWidget {
   State<shoeInfo_UserView> createState() => _shoeInfo_UserViewState();
 }
 
+// 管理用户查看鞋子详情信息界面状态的类
 class _shoeInfo_UserViewState extends State<shoeInfo_UserView> {
   @override
   Widget build(BuildContext context) {
-    // 从 ModalRoute 的 settings 中读取命名路由传入的 arguments。
-    // 我们支持两种形态的参数：
-    // 1) Map 形式（例如 {"shoeId": 3}） — 推荐形式，便于以后扩展字段；
-    // 2) 直接传入 int（例如 3） — 兼容老代码或简单场景。
+    // 获取包裹
     final args = ModalRoute.of(context)?.settings.arguments;
-    int? shoeId;
-    if (args is Map && args['shoeId'] is int) {
-      shoeId = args['shoeId'] as int;
-    } else if (args is int) {
-      shoeId = args;
+    print('【详情页调试】收到的 arguments 类型: ${args.runtimeType}, 内容: $args');
+
+    String? shoeId;
+
+    // 增强型解析逻辑
+    if (args != null) {
+      if (args is Map) {
+        shoeId = args['shoeId'];
+      } else {
+        // 如果 arguments 直接就是 "123" 这种字符串或数字
+        shoeId = args.toString();
+      }
     }
 
     return Scaffold(
@@ -27,7 +33,9 @@ class _shoeInfo_UserViewState extends State<shoeInfo_UserView> {
       body: SafeArea(
         child: Center(
           child: Text(
-            shoeId != null ? "鞋子详情页面 - id: $shoeId" : "鞋子详情页面 - 未传入id",
+            shoeId != null
+                ? "鞋子详情页面 - id: $shoeId"
+                : "未识别到 ID (收到的原始数据: $args)",
           ),
         ),
       ),
