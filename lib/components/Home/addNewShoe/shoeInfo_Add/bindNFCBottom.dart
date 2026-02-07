@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shoecloud/nfc/bind.dart';
+import 'package:shoecloud/nfc/writeToNFC.dart';
 
 class bindNFCBottom extends StatefulWidget {
   const bindNFCBottom({super.key});

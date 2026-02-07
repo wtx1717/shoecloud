@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
 import 'package:ndef/ndef.dart' as ndef;
 import 'dart:typed_data';
