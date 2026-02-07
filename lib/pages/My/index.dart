@@ -1,9 +1,11 @@
 //这个页面写的有点乱其实，后期可以考虑拆分一下
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shoecloud/components/My/featuresLine.dart';
 import 'package:shoecloud/components/My/featuresSquare.dart';
 import 'package:shoecloud/components/My/userInfo.dart';
 import 'package:shoecloud/components/common/clickableWrapper.dart';
+import 'package:shoecloud/stores/userController.dart';
 
 class MyView extends StatefulWidget {
   const MyView({super.key});
@@ -13,6 +15,9 @@ class MyView extends StatefulWidget {
 }
 
 class _MyViewState extends State<MyView> {
+  //放入一个对象实例
+  final UserController _userController = Get.put(UserController());
+
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(slivers: _getScrollViewSlivers());
@@ -21,7 +26,17 @@ class _MyViewState extends State<MyView> {
   List<Widget> _getScrollViewSlivers() {
     return [
       //用户基础信息
-      SliverToBoxAdapter(child: userInfo()),
+      SliverToBoxAdapter(
+        child: Obx(() {
+          //obx中必须又可监测的响应式数据
+          if (_userController.user.value.userId.isNotEmpty) {
+            return userInfo(isLogin: true);
+          } else {
+            return userInfo(isLogin: false);
+          }
+        }),
+      ),
+
       SliverToBoxAdapter(child: SizedBox(height: 10)),
 
       SliverToBoxAdapter(

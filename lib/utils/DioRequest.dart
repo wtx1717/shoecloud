@@ -42,6 +42,11 @@ class DioRequest {
     return _handleResponse(_dio.get(url, queryParameters: params));
   }
 
+  //定义post接口
+  Future<dynamic> post(String url, {Map<String, dynamic>? params}) {
+    return _handleResponse(_dio.post(url, data: params));
+  }
+
   //进一步处理返回结果的函数
   Future<dynamic> _handleResponse(Future<Response<dynamic>> task) async {
     try {

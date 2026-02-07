@@ -5,6 +5,7 @@ import 'package:shoecloud/pages/Home/shoeInfo_User.dart';
 import 'package:shoecloud/pages/Home/shoeInfo_add.dart';
 import 'package:shoecloud/pages/Login/index.dart';
 import 'package:shoecloud/pages/Main/index.dart';
+import 'package:shoecloud/pages/Privacy/index.dart';
 
 //返回App根级组件
 Widget getRootWidget() {
@@ -23,5 +24,6 @@ Map<String, Widget Function(BuildContext)> getRootRoutes() {
     "/addNewShoe": (context) => addNewShoeView(), //添加新跑鞋路由
     "/shoeInfo_User": (context) => shoeInfo_UserView(), //鞋子详情页面路由
     "/shoeInfo_AddView": (context) => shoeInfo_AddView(), //添加新鞋子页面路由
+    "/privacyPage": (context) => privacyPage(), //隐私政策页面路由
   };
 }

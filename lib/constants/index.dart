@@ -9,4 +9,5 @@ class GlobalConstants {
 class HttpConstants {
   static const String BANNER_LIST =
       "/uploadtest/config/addShoeInfoExample.json";
+  static const String LOGIN = "/login/user_info.json";
 }

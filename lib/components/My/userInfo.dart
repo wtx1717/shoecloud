@@ -1,17 +1,68 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:shoecloud/components/My/Badge/example.dart';
 import 'package:shoecloud/components/common/clickableWrapper.dart';
+import 'package:shoecloud/stores/userController.dart';
 
+// ignore: must_be_immutable, camel_case_types
 class userInfo extends StatefulWidget {
-  const userInfo({super.key});
+  //是否登录
+  bool isLogin;
+  userInfo({super.key, required this.isLogin});
 
   @override
   State<userInfo> createState() => _userInfoState();
 }
 
 class _userInfoState extends State<userInfo> {
+  final UserController _userController = Get.find();
+
   @override
   Widget build(BuildContext context) {
+    return !widget.isLogin ? _buildLoggedOutUI() : _buildLoggedInUI();
+  }
+
+  //未登录界面
+  Widget _buildLoggedOutUI() {
+    return Container(
+      height: 150,
+      width: double.infinity,
+      color: Colors.grey,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          SizedBox(width: 40),
+          //头像
+          CircleAvatar(
+            radius: 50,
+            backgroundColor: Colors.white,
+            child: Image.network(
+              "example.com/user_avatar.png",
+              //链接错误则返回默认头像
+              errorBuilder: (context, error, stackTrace) {
+                return Icon(Icons.person, size: 50, color: Colors.grey);
+              },
+            ),
+          ),
+          SizedBox(width: 40),
+          //提示登录
+          Center(
+            child: clickableWrapper(
+              route: "login",
+              child: Text(
+                "点击登录",
+                style: TextStyle(fontSize: 20, color: Colors.white),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  //已登录界面
+  Widget _buildLoggedInUI() {
     return Container(
       height: 150,
       width: double.infinity,
