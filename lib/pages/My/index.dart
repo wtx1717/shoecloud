@@ -61,6 +61,7 @@ class _MyViewState extends State<MyView> {
           ),
           delegate: SliverChildBuilderDelegate((context, index) {
             return clickableWrapper(
+              isDeveloping: true,
               route: "方格功能${index + 1}",
               child: featuresSquare(title: "方格功能${index + 1}"),
             );
@@ -83,6 +84,7 @@ class _MyViewState extends State<MyView> {
       SliverList(
         delegate: SliverChildBuilderDelegate((context, index) {
           return clickableWrapper(
+            isDeveloping: true,
             route: "条形功能${index + 1}",
             child: featuresLine(title: "条形功能${index + 1}"),
           );

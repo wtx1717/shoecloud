@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:shoecloud/nfc/writeToNFC.dart';
 
 class bindNFCBottom extends StatefulWidget {
-  const bindNFCBottom({super.key});
+  final String shoeId;
+  final String userId;
+  const bindNFCBottom({super.key, required this.shoeId, required this.userId});
 
   @override
   State<bindNFCBottom> createState() => _bindNFCBottomState();
@@ -94,7 +96,7 @@ class _bindNFCBottomState extends State<bindNFCBottom> {
               //这里要补充NFC绑定逻辑，即写入NFC的行为
               print("用户要绑定NFC标签了");
 
-              await writeToNFC("12");
+              await writeToNFC(widget.shoeId, widget.userId);
 
               //关闭弹窗
               Navigator.pop(context);

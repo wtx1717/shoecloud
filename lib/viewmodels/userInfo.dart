@@ -154,4 +154,6 @@ class ShoeItem {
       detailUrl: json["detailUrl"] ?? "",
     );
   }
+
+  Object? operator [](String other) {}
 }

@@ -1,21 +1,27 @@
 // ignore: file_names
-import 'package:flutter/services.dart'; // 用于捕获 PlatformException
+import 'package:flutter/services.dart';
 import 'package:flutter_nfc_kit/flutter_nfc_kit.dart';
 import 'package:ndef/ndef.dart' as ndef;
 
 class NDEFBuilder {
   /// 构造鞋子绑定的 URI 记录和 AAR 记录
-  static List<ndef.NDEFRecord> buildShoeRecords(String shoeId) {
-    // URI 记录
-    final uriString = 'shoecloud://bind/$shoeId';
+  /// [shoeId] 鞋子唯一ID
+  /// [userId] 当前绑定用户的ID
+  static List<ndef.NDEFRecord> buildShoeRecords(String shoeId, String userId) {
+    // 1. URI 记录：将 userId 拼接到 URL 参数中
+    // 格式：shoecloud://bind/$shoeId?userId=$userId
+    final uriString = 'shoecloud://bind/$shoeId?userId=$userId';
+
+    // NDEF URI 记录的 Payload 首字节 0x00 表示协议由字符串本身定义
     final uriPayload = Uint8List.fromList([0x00, ...uriString.codeUnits]);
+
     final uriRecord = ndef.NDEFRecord(
       tnf: ndef.TypeNameFormat.nfcWellKnown,
-      type: Uint8List.fromList([0x55]),
+      type: Uint8List.fromList([0x55]), // 'U' 代表 URI 类型
       payload: uriPayload,
     );
 
-    // AAR 记录
+    // 2. AAR 记录：确保在 Android 上直接拉起 App 而不是打开浏览器
     final aarRecord = ndef.NDEFRecord(
       tnf: ndef.TypeNameFormat.nfcExternal,
       type: Uint8List.fromList('android.com:pkg'.codeUnits),
@@ -26,7 +32,9 @@ class NDEFBuilder {
   }
 }
 
-Future<void> writeToNFC(String shoeId) async {
+/// 写入 NFC 流程
+/// 需要传入 [shoeId] 和 [userId]
+Future<void> writeToNFC(String shoeId, String userId) async {
   try {
     // 1. 环境预检
     await _checkNFCAvailability();
@@ -39,10 +47,10 @@ Future<void> writeToNFC(String shoeId) async {
     );
 
     // 3. 状态校验 (卫语句)
-    if (tag.ndefWritable != true) throw Exception("该标签不可写");
+    if (tag.ndefWritable != true) throw Exception("该标签不可写或已锁定");
 
-    // 4. 执行写入
-    final records = NDEFBuilder.buildShoeRecords(shoeId);
+    // 4. 执行写入：传入两个参数
+    final records = NDEFBuilder.buildShoeRecords(shoeId, userId);
     await FlutterNfcKit.writeNDEFRecords(records);
 
     await FlutterNfcKit.finish(iosAlertMessage: "绑定成功！");

@@ -59,6 +59,7 @@ class _ExpandableCategoryBarState extends State<expandableCategoryBar> {
               SizedBox(height: 3),
               //分类项
               clickableWrapper(
+                isDeveloping: true,
                 route: 'null',
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -83,6 +84,7 @@ class _ExpandableCategoryBarState extends State<expandableCategoryBar> {
   List<Widget> _getWrapChildren(int a) {
     return List.generate(_list[a].length, (b) {
       return clickableWrapper(
+        isDeveloping: true,
         route: 'null',
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),

@@ -41,45 +41,50 @@ class _privacyPageState extends State<privacyPage> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(24),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.03),
-                  blurRadius: 15,
-                  offset: const Offset(0, 8),
-                ),
-              ],
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // 顶部状态条
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Icon(
-                      Icons.security,
-                      color: Color(0xFF81C784),
-                      size: 30,
-                    ),
-                    Text(
-                      isChinese ? "更新于 2025/12/16" : "Updated 2025/12/16",
-                      style: const TextStyle(color: Colors.grey, fontSize: 12),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                const Divider(),
-                // 引用外部文本组件
-                policyContent(isChinese: isChinese),
-              ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.03),
+                    blurRadius: 15,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 顶部状态条
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Icon(
+                        Icons.security,
+                        color: Color(0xFF81C784),
+                        size: 30,
+                      ),
+                      Text(
+                        isChinese ? "更新于 2025/12/16" : "Updated 2025/12/16",
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  const Divider(),
+                  // 引用外部文本组件
+                  policyContent(isChinese: isChinese),
+                ],
+              ),
             ),
           ),
         ),

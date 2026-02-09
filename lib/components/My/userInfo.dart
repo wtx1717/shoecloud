@@ -121,6 +121,7 @@ class _userInfoState extends State<userInfo> {
             //将内容推向右侧
             Spacer(),
             clickableWrapper(
+              isDeveloping: true,
               route: "进入个人首页",
               child: Container(
                 alignment: Alignment.center,

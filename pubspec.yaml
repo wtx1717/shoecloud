@@ -28,6 +28,8 @@ dependencies:
   get: ^4.7.3
   #token持久化处理
   shared_preferences: ^2.5.4
+  #图标
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:
@@ -44,3 +46,8 @@ flutter:
     - lib/assets/home/
     - lib/assets/social/
     - lib/assets/my/
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "lib/assets/app-icon.png" # 你的图标路径

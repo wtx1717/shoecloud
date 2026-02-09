@@ -50,6 +50,7 @@ class _ExpandableCategoryBarState extends State<expandableCategoryBar> {
         alignment: WrapAlignment.start, // 左对齐
         children: List.generate(categories.length, (index) {
           return clickableWrapper(
+            isDeveloping: true,
             route: categories[index],
             child: Container(
               height: 36,

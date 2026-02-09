@@ -21,25 +21,35 @@ class _shoeInfo_AddViewState extends State<shoeInfo_AddView> {
       body: SafeArea(
         child: Column(
           children: [
-            // 轮播图
-            bannerShoeInfo_Add(imagesUrl: args['imagesUrl']),
-            SizedBox(height: 10),
+            Expanded(
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  children: [
+                    // 轮播图
+                    bannerShoeInfo_Add(imagesUrl: args['imagesUrl']),
+                    SizedBox(height: 10),
 
-            // 信息卡片
-            cardShoeInfo_Add(
-              name: args['name'],
-              brand: args['brand'],
-              release_price: args['release_price'],
-              release_year: args['release_year'],
-              features: args['features'],
-              description: args['description'],
-              category: args['category'],
+                    // 信息卡片
+                    cardShoeInfo_Add(
+                      name: args['name'],
+                      brand: args['brand'],
+                      release_price: args['release_price'],
+                      release_year: args['release_year'],
+                      features: args['features'],
+                      description: args['description'],
+                      category: args['category'],
+                    ),
+                  ],
+                ),
+              ),
             ),
 
-            Spacer(), //填充空白
-            // 绑定NFC按钮
-            bindNFCBottom(),
-            SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsetsGeometry.symmetric(vertical: 20),
+              // 绑定NFC按钮
+              child: bindNFCBottom(shoeId: "0", userId: "0"),
+            ),
           ],
         ),
       ),
