@@ -16,7 +16,7 @@ class MyView extends StatefulWidget {
 
 class _MyViewState extends State<MyView> {
   //放入一个对象实例
-  final UserController _userController = Get.put(UserController());
+  final UserController _userController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class _MyViewState extends State<MyView> {
       SliverToBoxAdapter(
         child: Obx(() {
           //obx中必须又可监测的响应式数据
-          if (_userController.user.value.userId.isNotEmpty) {
+          if (_userController.loginInfo.value.userId.isNotEmpty) {
             return userInfo(isLogin: true);
           } else {
             return userInfo(isLogin: false);

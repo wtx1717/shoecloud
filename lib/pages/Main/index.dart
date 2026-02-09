@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:shoecloud/api/userinfo.dart';
 import 'package:shoecloud/pages/Home/index.dart';
 import 'package:shoecloud/pages/My/index.dart';
 import 'package:shoecloud/pages/Social/index.dart';
 import 'package:shoecloud/nfc/nfc_manager.dart';
+import 'package:shoecloud/stores/tokenManager.dart';
+import 'package:shoecloud/stores/userController.dart';
+import 'package:shoecloud/viewmodels/userInfo.dart';
+import 'package:shoecloud/viewmodels/userLogin.dart';
 
 // 主页面类，继承自 StatefulWidget，用于展示底部导航栏和对应页面
 class MainPage extends StatefulWidget {
@@ -15,12 +21,15 @@ class MainPage extends StatefulWidget {
 // 主页面的状态类，继承自 State<MainPage>
 class _MainPageState extends State<MainPage> {
   final NfcManager _nfcManager = NfcManager(); // 获取单例
+  final UserController _userController = Get.put(UserController()); // 获取单例
 
   @override
   void initState() {
     super.initState();
     // 传入 context 初始化即可
     _nfcManager.init(context);
+    // 初始化用户信息
+    _initUserInfo();
   }
 
   @override
@@ -87,5 +96,21 @@ class _MainPageState extends State<MainPage> {
   //根据数据生成页面列表
   List<Widget> _getTabBarPages() {
     return [HomeView(), SocialView(), MyView()];
+  }
+
+  Future<void> _initUserInfo() async {
+    await tokenManager.init(); //初始化token
+
+    if (tokenManager.getToken().isNotEmpty) {
+      // 1. 先生成详细模型
+      UserInfoModel? detail = await getUserInfoAPI(
+        "/user_${tokenManager.getUserId()}/userInfo_base.json",
+      );
+
+      // 2. 转换为登录模型
+      userLogin loginBasic = detail!.toUserLogin();
+      _userController.updateFullInfo(detail);
+      _userController.updateuserLogin(loginBasic);
+    }
   }
 }

@@ -24,7 +24,10 @@ dependencies:
   flutter_nfc_kit: ^3.6.2
   #app_links库，用于处理应用内链接跳转
   app_links: ^7.0.0
+  #全局数据获取
   get: ^4.7.3
+  #token持久化处理
+  shared_preferences: ^2.5.4
 
 dev_dependencies:
   flutter_test:

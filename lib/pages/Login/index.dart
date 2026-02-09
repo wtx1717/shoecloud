@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:shoecloud/api/login.dart';
+import 'package:shoecloud/api/userInfo.dart';
 import 'package:shoecloud/components/Login/loginFields.dart';
+import 'package:shoecloud/stores/tokenManager.dart';
 import 'package:shoecloud/stores/userController.dart';
+import 'package:shoecloud/viewmodels/userInfo.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -113,7 +116,19 @@ class _LoginPageState extends State<LoginPage> {
 
       // 4. 判断是否匹配成功
       if (user != null) {
+        tokenManager.setToken(user.token); //写入持久化数据
+        tokenManager.setUserId(user.userId); //写入持久化数据
+
         _userController.updateuserLogin(user); // 更新用户信息
+
+        UserInfoModel? fullData = await getUserInfoAPI(
+          "/user_${_userController.loginInfo.value.userId}/userInfo_base.json",
+        );
+
+        if (fullData != null) {
+          _userController.updateFullInfo(fullData);
+        }
+
         debugPrint("登录成功: ${user.userId}");
         _showWarning("登录成功，即将跳转主页");
 
