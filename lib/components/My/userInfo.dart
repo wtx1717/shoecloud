@@ -116,7 +116,7 @@ class _userInfoState extends State<userInfo> {
                   ),
                   const SizedBox(width: 10),
                   clickableWrapper(
-                    route: "编辑个人资料",
+                    route: "userInfoEditView",
                     child: Image.asset(
                       "lib/assets/my/edit.png",
                       height: 18,
