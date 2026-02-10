@@ -13,36 +13,39 @@ class bindNFCBottom extends StatefulWidget {
 class _bindNFCBottomState extends State<bindNFCBottom> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        showModalBottomSheet(
-          context: context,
-          backgroundColor: Colors.transparent,
-          isScrollControlled: true,
-          builder: (BuildContext context) => _getShowModalBottomSheet(),
-        );
-      },
-      child: Container(
-        height: 70,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: const Color(0xFFFFF9C4), // 奶油黄主按钮
-          borderRadius: BorderRadius.circular(35),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFF2E7D32).withOpacity(0.1),
-              blurRadius: 20,
-              offset: const Offset(0, 10),
-            ),
-          ],
-        ),
-        child: const Center(
-          child: Text(
-            "与 NFC 芯片绑定",
+    // 为了和“仅添加”按钮视觉对齐，这里使用相同的 Margin 和样式
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(25, 10, 25, 12), // 底部留点间距给下一个按钮
+      child: GestureDetector(
+        onTap: () {
+          showModalBottomSheet(
+            context: context,
+            backgroundColor: Colors.transparent,
+            isScrollControlled: true,
+            builder: (BuildContext context) => _getShowModalBottomSheet(),
+          );
+        },
+        child: Container(
+          height: 55, // 高度统一为 55
+          width: double.infinity,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: const Color(0xFF2E7D32), // 绑定按钮用深绿色，区分度更高
+            borderRadius: BorderRadius.circular(20), // 圆角保持一致
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF2E7D32).withOpacity(0.1),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: const Text(
+            "添加并与 NFC 绑定", // 统一文案风格
             style: TextStyle(
-              color: Color(0xFF2E7D32),
-              fontSize: 20,
-              fontWeight: FontWeight.w800,
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
@@ -50,7 +53,7 @@ class _bindNFCBottomState extends State<bindNFCBottom> {
     );
   }
 
-  // 绑定成功后的提示弹窗
+  // 绑定成功后的提示弹窗 (保持原样，但微调了关闭逻辑以适应 pushNamedAndRemoveUntil)
   void _showSuccessDialog() {
     showDialog(
       context: context,
@@ -80,8 +83,12 @@ class _bindNFCBottomState extends State<bindNFCBottom> {
             const SizedBox(height: 30),
             GestureDetector(
               onTap: () {
-                Navigator.pop(context); // 关弹窗
-                Navigator.pop(context); // 回到列表页
+                // 这里的逻辑建议和“仅添加”保持一致，直接重置回首页
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/',
+                  (route) => false,
+                );
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(
@@ -107,7 +114,7 @@ class _bindNFCBottomState extends State<bindNFCBottom> {
     );
   }
 
-  // 底部 NFC 唤起弹窗
+  // 底部 NFC 唤起弹窗 (保持逻辑不变，只做 UI 微调)
   Widget _getShowModalBottomSheet() {
     final double screenHeight = MediaQuery.of(context).size.height;
     return Container(
@@ -120,7 +127,6 @@ class _bindNFCBottomState extends State<bindNFCBottom> {
       child: Column(
         children: [
           const SizedBox(height: 15),
-          // 顶部装饰条
           Container(
             width: 40,
             height: 4,
@@ -143,33 +149,31 @@ class _bindNFCBottomState extends State<bindNFCBottom> {
             "请将 NFC 标签靠近手机背部感应区",
             style: TextStyle(color: Colors.grey),
           ),
-
           const Spacer(),
-
+          // 如果没有图片会报错，请确保路径正确
           Image.asset(
             "lib/assets/home/bindNFC.png",
             height: 180,
             fit: BoxFit.contain,
+            errorBuilder: (c, e, s) =>
+                const Icon(Icons.nfc, size: 100, color: Colors.grey),
           ),
-
           const Spacer(),
-
           GestureDetector(
             onTap: () async {
-              print("用户开启写入流程...");
               try {
                 await writeToNFC(widget.shoeId, widget.userId);
                 if (mounted) {
-                  Navigator.pop(context); // 关闭底部弹窗
-                  _showSuccessDialog(); // 显示成功反馈
+                  Navigator.pop(context); // 关掉 BottomSheet
+                  _showSuccessDialog(); // 弹成功窗
                 }
               } catch (e) {
-                print("写入中止: $e");
+                print("写入失败: $e");
               }
             },
             child: Container(
               margin: const EdgeInsets.only(bottom: 40),
-              height: 70,
+              height: 55, // 这里也改为 55，保持整体统一
               width: 220,
               decoration: BoxDecoration(
                 color: const Color(0xFF2E7D32),

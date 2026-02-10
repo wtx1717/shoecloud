@@ -87,6 +87,7 @@ class _HomeViewState extends State<HomeView> {
           childCount: _userController.fullInfo.value?.accountSummary.shoesCount,
         ),
       ),
+      SliverToBoxAdapter(child: SizedBox(height: 100)),
     ];
   }
 

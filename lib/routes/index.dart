@@ -1,6 +1,7 @@
 //管理路由
 import 'package:flutter/material.dart';
 import 'package:shoecloud/pages/Home/addNewShoe.dart';
+import 'package:shoecloud/pages/Home/shoeEdit.dart';
 import 'package:shoecloud/pages/Home/shoeInfo_User.dart';
 import 'package:shoecloud/pages/Home/shoeInfo_add.dart';
 import 'package:shoecloud/pages/Login/index.dart';
@@ -29,5 +30,6 @@ Map<String, Widget Function(BuildContext)> getRootRoutes() {
     "/privacyPage": (context) => privacyPage(), //隐私政策页面路由
     "/developing": (context) => comingSoonView(), //开发中页面路由
     "/userInfoEditView": (context) => userInfoEditView(), //用户信息编辑页面路由
+    "/shoeEditView": (context) => shoeEditView(), //鞋子编辑页面路由
   };
 }
