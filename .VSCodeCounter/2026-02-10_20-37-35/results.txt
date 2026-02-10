@@ -1,0 +1,110 @@
+Date : 2026-02-10 20:37:35
+Directory : d:\shoecloud\lib
+Total : 56 files,  3445 codes, 346 comments, 406 blanks, all 4197 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Dart     |         56 |      3,445 |        346 |        406 |      4,197 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                        | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                           |         56 |      3,445 |        346 |        406 |      4,197 |
+| . (Files)                                                                   |          1 |          5 |          1 |          2 |          8 |
+| api                                                                         |          4 |         87 |         89 |         20 |        196 |
+| components                                                                  |         25 |      1,691 |         93 |        155 |      1,939 |
+| components\Home                                                             |         13 |      1,059 |         56 |         88 |      1,203 |
+| components\Home\addNewShoe                                                  |          5 |        537 |         25 |         42 |        604 |
+| components\Home\addNewShoe (Files)                                          |          2 |        151 |          8 |         14 |        173 |
+| components\Home\addNewShoe\shoeInfo_Add                                     |          3 |        386 |         17 |         28 |        431 |
+| components\Home\firstuse                                                    |          1 |         34 |          2 |          4 |         40 |
+| components\Home\normal                                                      |          3 |        263 |         24 |         23 |        310 |
+| components\Home\shoeInfo_user                                               |          4 |        225 |          5 |         19 |        249 |
+| components\Login                                                            |          1 |        140 |          9 |         13 |        162 |
+| components\My                                                               |          4 |        233 |         14 |         20 |        267 |
+| components\My (Files)                                                       |          3 |        209 |         13 |         17 |        239 |
+| components\My\Badge                                                         |          1 |         24 |          1 |          3 |         28 |
+| components\Social                                                           |          5 |        158 |          5 |         24 |        187 |
+| components\common                                                           |          2 |        101 |          9 |         10 |        120 |
+| constants                                                                   |          1 |         12 |          2 |          2 |         16 |
+| nfc                                                                         |          2 |        113 |         34 |         28 |        175 |
+| pages                                                                       |         14 |      1,102 |         80 |        135 |      1,317 |
+| pages (Files)                                                               |          1 |         98 |          7 |          8 |        113 |
+| pages\Home                                                                  |          4 |        318 |         23 |         39 |        380 |
+| pages\Login                                                                 |          1 |        114 |         16 |         20 |        150 |
+| pages\Main                                                                  |          1 |        129 |         13 |         14 |        156 |
+| pages\My                                                                    |          1 |        100 |          8 |         12 |        120 |
+| pages\Privacy                                                               |          2 |        311 |         10 |         29 |        350 |
+| pages\Social                                                                |          4 |         32 |          3 |         13 |         48 |
+| routes                                                                      |          1 |         25 |          4 |          3 |         32 |
+| stores                                                                      |          2 |         53 |          7 |         14 |         74 |
+| utils                                                                       |          2 |         81 |         15 |         16 |        112 |
+| viewmodels                                                                  |          4 |        276 |         21 |         31 |        328 |
++-----------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                    | language | code       | comment    | blank      | total      |
++-----------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| d:\shoecloud\lib\api\home.dart                                              | Dart     |          9 |         17 |          3 |         29 |
+| d:\shoecloud\lib\api\login.dart                                             | Dart     |         22 |         27 |          5 |         54 |
+| d:\shoecloud\lib\api\shoeInfo.dart                                          | Dart     |         41 |         21 |          8 |         70 |
+| d:\shoecloud\lib\api\userInfo.dart                                          | Dart     |         15 |         24 |          4 |         43 |
+| d:\shoecloud\lib\components\Home\addNewShoe\expandableCategoryBar.dart      | Dart     |         88 |          7 |         10 |        105 |
+| d:\shoecloud\lib\components\Home\addNewShoe\shoeInfoMin.dart                | Dart     |         63 |          1 |          4 |         68 |
+| d:\shoecloud\lib\components\Home\addNewShoe\shoeInfo_Add\banner.dart        | Dart     |         67 |         12 |          8 |         87 |
+| d:\shoecloud\lib\components\Home\addNewShoe\shoeInfo_Add\bindNFCBottom.dart | Dart     |        189 |          3 |         10 |        202 |
+| d:\shoecloud\lib\components\Home\addNewShoe\shoeInfo_Add\infoCard.dart      | Dart     |        130 |          2 |         10 |        142 |
+| d:\shoecloud\lib\components\Home\firstuse\first.dart                        | Dart     |         34 |          2 |          4 |         40 |
+| d:\shoecloud\lib\components\Home\normal\addNewShoeBottom.dart               | Dart     |         23 |          3 |          5 |         31 |
+| d:\shoecloud\lib\components\Home\normal\expandableCategoryBar.dart          | Dart     |        100 |         10 |          9 |        119 |
+| d:\shoecloud\lib\components\Home\normal\shoeOverviewCard.dart               | Dart     |        140 |         11 |          9 |        160 |
+| d:\shoecloud\lib\components\Home\shoeInfo_user\shoeDetailList.dart          | Dart     |         62 |          1 |          5 |         68 |
+| d:\shoecloud\lib\components\Home\shoeInfo_user\shoeFeatureTags.dart         | Dart     |         40 |          1 |          5 |         46 |
+| d:\shoecloud\lib\components\Home\shoeInfo_user\shoeHeroHeader.dart          | Dart     |         54 |          1 |          4 |         59 |
+| d:\shoecloud\lib\components\Home\shoeInfo_user\shoeStatsGrid.dart           | Dart     |         69 |          2 |          5 |         76 |
+| d:\shoecloud\lib\components\Login\loginFields.dart                          | Dart     |        140 |          9 |         13 |        162 |
+| d:\shoecloud\lib\components\My\Badge\example.dart                           | Dart     |         24 |          1 |          3 |         28 |
+| d:\shoecloud\lib\components\My\featuresLine.dart                            | Dart     |         29 |          1 |          5 |         35 |
+| d:\shoecloud\lib\components\My\featuresSquare.dart                          | Dart     |         36 |          0 |          5 |         41 |
+| d:\shoecloud\lib\components\My\userInfo.dart                                | Dart     |        144 |         12 |          7 |        163 |
+| d:\shoecloud\lib\components\Social\more.dart                                | Dart     |         16 |          0 |          4 |         20 |
+| d:\shoecloud\lib\components\Social\openSource.dart                          | Dart     |         16 |          0 |          4 |         20 |
+| d:\shoecloud\lib\components\Social\shoeKnowledge.dart                       | Dart     |         16 |          0 |          4 |         20 |
+| d:\shoecloud\lib\components\Social\shoeReviews.dart                         | Dart     |         16 |          0 |          4 |         20 |
+| d:\shoecloud\lib\components\Social\socialCard.dart                          | Dart     |         94 |          5 |          8 |        107 |
+| d:\shoecloud\lib\components\common\clickableWrapper.dart                    | Dart     |         37 |          5 |          5 |         47 |
+| d:\shoecloud\lib\components\common\showComingSoonDialog.dart                | Dart     |         64 |          4 |          5 |         73 |
+| d:\shoecloud\lib\constants\index.dart                                       | Dart     |         12 |          2 |          2 |         16 |
+| d:\shoecloud\lib\main.dart                                                  | Dart     |          5 |          1 |          2 |          8 |
+| d:\shoecloud\lib\nfc\nfc_manager.dart                                       | Dart     |         62 |         18 |         15 |         95 |
+| d:\shoecloud\lib\nfc\writeToNFC.dart                                        | Dart     |         51 |         16 |         13 |         80 |
+| d:\shoecloud\lib\pages\Home\addNewShoe.dart                                 | Dart     |         72 |          2 |         10 |         84 |
+| d:\shoecloud\lib\pages\Home\index.dart                                      | Dart     |         86 |         12 |         14 |        112 |
+| d:\shoecloud\lib\pages\Home\shoeInfo_Add.dart                               | Dart     |         98 |          5 |          9 |        112 |
+| d:\shoecloud\lib\pages\Home\shoeInfo_User.dart                              | Dart     |         62 |          4 |          6 |         72 |
+| d:\shoecloud\lib\pages\Login\index.dart                                     | Dart     |        114 |         16 |         20 |        150 |
+| d:\shoecloud\lib\pages\Main\index.dart                                      | Dart     |        129 |         13 |         14 |        156 |
+| d:\shoecloud\lib\pages\My\index.dart                                        | Dart     |        100 |          8 |         12 |        120 |
+| d:\shoecloud\lib\pages\Privacy\index.dart                                   | Dart     |         86 |          3 |          6 |         95 |
+| d:\shoecloud\lib\pages\Privacy\policyContent.dart                           | Dart     |        225 |          7 |         23 |        255 |
+| d:\shoecloud\lib\pages\Social\Opensource.dart                               | Dart     |          0 |          0 |          2 |          2 |
+| d:\shoecloud\lib\pages\Social\index.dart                                    | Dart     |         32 |          3 |          7 |         42 |
+| d:\shoecloud\lib\pages\Social\shoeKnowledge.dart                            | Dart     |          0 |          0 |          2 |          2 |
+| d:\shoecloud\lib\pages\Social\shoeReviews.dart                              | Dart     |          0 |          0 |          2 |          2 |
+| d:\shoecloud\lib\pages\developing.dart                                      | Dart     |         98 |          7 |          8 |        113 |
+| d:\shoecloud\lib\routes\index.dart                                          | Dart     |         25 |          4 |          3 |         32 |
+| d:\shoecloud\lib\stores\tokenManager.dart                                   | Dart     |         40 |          5 |         10 |         55 |
+| d:\shoecloud\lib\stores\userController.dart                                 | Dart     |         13 |          2 |          4 |         19 |
+| d:\shoecloud\lib\utils\DioRequest.dart                                      | Dart     |         56 |         12 |         10 |         78 |
+| d:\shoecloud\lib\utils\TimeUtils.dart                                       | Dart     |         25 |          3 |          6 |         34 |
+| d:\shoecloud\lib\viewmodels\addShoeInfo.dart                                | Dart     |         35 |          4 |          2 |         41 |
+| d:\shoecloud\lib\viewmodels\shoeInfo.dart                                   | Dart     |         90 |          3 |          6 |         99 |
+| d:\shoecloud\lib\viewmodels\userInfo.dart                                   | Dart     |        128 |         13 |         21 |        162 |
+| d:\shoecloud\lib\viewmodels\userLogin.dart                                  | Dart     |         23 |          1 |          2 |         26 |
+| Total                                                                       |          |      3,445 |        346 |        406 |      4,197 |
++-----------------------------------------------------------------------------+----------+------------+------------+------------+------------+

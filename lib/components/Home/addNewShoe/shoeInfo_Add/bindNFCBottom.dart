@@ -13,53 +13,36 @@ class bindNFCBottom extends StatefulWidget {
 class _bindNFCBottomState extends State<bindNFCBottom> {
   @override
   Widget build(BuildContext context) {
-    final double _screenWidth = MediaQuery.of(context).size.width;
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        _getBottom("不与NFC绑定", _screenWidth),
-        _getBottom("与NFC绑定", _screenWidth),
-      ],
-    );
-  }
-
-  Widget _getBottom(String text, double width) {
-    final double _screenHeight = MediaQuery.of(context).size.height;
-
-    //点击事件
-    return InkWell(
+    return GestureDetector(
       onTap: () {
-        if (text == "不与NFC绑定") {
-          //关闭当前页面
-          Navigator.pop(context);
-        } else {
-          //弹出底部弹窗（非切换路由）
-          showModalBottomSheet(
-            context: context,
-            //透明背景
-            backgroundColor: Colors.transparent,
-            builder: (BuildContext context) {
-              //弹窗内容
-              return _getShowModalBottomSheet(_screenHeight);
-            },
-          );
-        }
+        showModalBottomSheet(
+          context: context,
+          backgroundColor: Colors.transparent,
+          isScrollControlled: true,
+          builder: (BuildContext context) => _getShowModalBottomSheet(),
+        );
       },
-      //按钮样式
       child: Container(
-        height: 80,
-        width: width / 2 - 20,
+        height: 70,
+        width: double.infinity,
         decoration: BoxDecoration(
-          color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(40),
+          color: const Color(0xFFFFF9C4), // 奶油黄主按钮
+          borderRadius: BorderRadius.circular(35),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF2E7D32).withOpacity(0.1),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
+            ),
+          ],
         ),
-        child: Center(
+        child: const Center(
           child: Text(
-            " $text ",
+            "与 NFC 芯片绑定",
             style: TextStyle(
-              color: text == "不与NFC绑定" ? Colors.red[300] : Colors.green[300],
+              color: Color(0xFF2E7D32),
               fontSize: 20,
+              fontWeight: FontWeight.w800,
             ),
           ),
         ),
@@ -67,56 +50,150 @@ class _bindNFCBottomState extends State<bindNFCBottom> {
     );
   }
 
-  Widget _getShowModalBottomSheet(double height) {
+  // 绑定成功后的提示弹窗
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFFE8F5E9),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.check_circle_rounded,
+              color: Color(0xFF2E7D32),
+              size: 80,
+            ),
+            const SizedBox(height: 20),
+            const Text(
+              "绑定成功！",
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF2E7D32),
+              ),
+            ),
+            const SizedBox(height: 12),
+            const Text("您的跑鞋已成功录入云端鞋库", textAlign: TextAlign.center),
+            const SizedBox(height: 30),
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context); // 关弹窗
+                Navigator.pop(context); // 回到列表页
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 15,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFF9C4),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Text(
+                  "太棒了",
+                  style: TextStyle(
+                    color: Color(0xFF2E7D32),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // 底部 NFC 唤起弹窗
+  Widget _getShowModalBottomSheet() {
+    final double screenHeight = MediaQuery.of(context).size.height;
     return Container(
-      height: height * 0.5,
+      height: screenHeight * 0.55,
       width: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.grey.withOpacity(0.5),
-        borderRadius: BorderRadius.circular(30),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(40)),
       ),
       child: Column(
         children: [
-          SizedBox(height: 20),
-          Text(
-            "请将NFC标签靠近手机",
-            style: TextStyle(fontSize: 20, color: Colors.white),
+          const SizedBox(height: 15),
+          // 顶部装饰条
+          Container(
+            width: 40,
+            height: 4,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(2),
+            ),
           ),
-          SizedBox(height: 20),
-          Image.asset(
-            "lib/assets/home/bindNFC.png",
-            height: 150,
-            fit: BoxFit.fitHeight,
+          const SizedBox(height: 30),
+          const Text(
+            "准备写入数据",
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF2E7D32),
+            ),
+          ),
+          const SizedBox(height: 10),
+          const Text(
+            "请将 NFC 标签靠近手机背部感应区",
+            style: TextStyle(color: Colors.grey),
           ),
 
-          Spacer(),
+          const Spacer(),
+
+          Image.asset(
+            "lib/assets/home/bindNFC.png",
+            height: 180,
+            fit: BoxFit.contain,
+          ),
+
+          const Spacer(),
 
           GestureDetector(
             onTap: () async {
-              //这里要补充NFC绑定逻辑，即写入NFC的行为
-              print("用户要绑定NFC标签了");
-
-              await writeToNFC(widget.shoeId, widget.userId);
-
-              //关闭弹窗
-              Navigator.pop(context);
+              print("用户开启写入流程...");
+              try {
+                await writeToNFC(widget.shoeId, widget.userId);
+                if (mounted) {
+                  Navigator.pop(context); // 关闭底部弹窗
+                  _showSuccessDialog(); // 显示成功反馈
+                }
+              } catch (e) {
+                print("写入中止: $e");
+              }
             },
             child: Container(
-              height: 80,
-              width: 160,
+              margin: const EdgeInsets.only(bottom: 40),
+              height: 70,
+              width: 220,
               decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(40),
+                color: const Color(0xFF2E7D32),
+                borderRadius: BorderRadius.circular(35),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF2E7D32).withOpacity(0.3),
+                    blurRadius: 15,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
               ),
-              child: Center(
+              child: const Center(
                 child: Text(
-                  " 写入 ",
-                  style: TextStyle(color: Colors.green[300], fontSize: 20),
+                  "开始写入",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
           ),
-          SizedBox(height: 20),
         ],
       ),
     );

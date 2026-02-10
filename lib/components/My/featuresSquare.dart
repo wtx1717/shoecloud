@@ -14,15 +14,24 @@ class _featuresSquareState extends State<featuresSquare> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey, width: 0.5),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
       ),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset("lib/assets/my/edit.png", height: 30, width: 30),
-            SizedBox(height: 5),
-            Text(widget.title, style: TextStyle(fontSize: 12)),
+            Image.asset(
+              "lib/assets/my/edit.png",
+              height: 28,
+              width: 28,
+              color: const Color(0xFF2E7D32),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              widget.title,
+              style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
+            ),
           ],
         ),
       ),

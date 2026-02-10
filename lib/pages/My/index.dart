@@ -1,4 +1,3 @@
-//这个页面写的有点乱其实，后期可以考虑拆分一下
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shoecloud/components/My/featuresLine.dart';
@@ -20,9 +19,17 @@ class _MyViewState extends State<MyView> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(slivers: _getScrollViewSlivers());
+    // 背景设为云鞋库浅绿
+    return Container(
+      color: const Color(0xFFE8F5E9),
+      child: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
+        slivers: _getScrollViewSlivers(),
+      ),
+    );
   }
 
+  //这个页面写的有点乱其实，后期可以考虑拆分一下
   List<Widget> _getScrollViewSlivers() {
     return [
       //用户基础信息
@@ -37,59 +44,76 @@ class _MyViewState extends State<MyView> {
         }),
       ),
 
-      SliverToBoxAdapter(child: SizedBox(height: 10)),
+      const SliverToBoxAdapter(child: SizedBox(height: 10)),
 
       SliverToBoxAdapter(
         child: Container(
-          padding: EdgeInsets.all(10),
-          child: Text(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: const Text(
             '功能区',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF2E7D32),
+            ),
           ),
         ),
       ),
 
       //功能方格
       SliverPadding(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         sliver: SliverGrid(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 4,
-            mainAxisSpacing: 0,
-            crossAxisSpacing: 0,
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 12,
             childAspectRatio: 1,
           ),
           delegate: SliverChildBuilderDelegate((context, index) {
             return clickableWrapper(
               isDeveloping: true,
               route: "方格功能${index + 1}",
-              child: featuresSquare(title: "方格功能${index + 1}"),
+              child: featuresSquare(title: "功能${index + 1}"),
             );
           }, childCount: 12),
         ),
       ),
 
+      const SliverToBoxAdapter(child: SizedBox(height: 20)),
+
       //更多设置
       SliverToBoxAdapter(
         child: Container(
-          padding: EdgeInsets.all(10),
-          child: Text(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: const Text(
             '更多设置',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF2E7D32),
+            ),
           ),
         ),
       ),
 
       //线性布局功能条
-      SliverList(
-        delegate: SliverChildBuilderDelegate((context, index) {
-          return clickableWrapper(
-            isDeveloping: true,
-            route: "条形功能${index + 1}",
-            child: featuresLine(title: "条形功能${index + 1}"),
-          );
-        }, childCount: 10),
+      SliverPadding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        sliver: SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: clickableWrapper(
+                isDeveloping: true,
+                route: "条形功能${index + 1}",
+                child: featuresLine(title: "条形功能${index + 1}"),
+              ),
+            );
+          }, childCount: 10),
+        ),
       ),
+      const SliverToBoxAdapter(child: SizedBox(height: 100)), // 为悬浮导航栏留空
     ];
   }
 }

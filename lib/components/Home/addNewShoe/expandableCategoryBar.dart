@@ -1,8 +1,6 @@
-// 顶部分类栏组件
 import 'package:flutter/material.dart';
 import 'package:shoecloud/components/common/clickableWrapper.dart';
 
-// ignore: camel_case_types
 class expandableCategoryBar extends StatefulWidget {
   const expandableCategoryBar({super.key});
 
@@ -34,7 +32,7 @@ class _ExpandableCategoryBarState extends State<expandableCategoryBar> {
         ),
 
         initiallyExpanded: false, // 默认是否展开
-        tilePadding: EdgeInsets.only(left: 16),
+        tilePadding: const EdgeInsets.only(left: 16),
         childrenPadding: EdgeInsets.zero,
 
         //展开后的子组件
@@ -47,7 +45,6 @@ class _ExpandableCategoryBarState extends State<expandableCategoryBar> {
   List<Widget> _getExpandedChildren() {
     return List.generate(_list.length, (index) {
       return Container(
-        color: Colors.amberAccent[100],
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         width: double.infinity,
         child: Material(
@@ -56,16 +53,19 @@ class _ExpandableCategoryBarState extends State<expandableCategoryBar> {
             spacing: 10,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 3),
+              const SizedBox(height: 3),
               //分类项
               clickableWrapper(
                 isDeveloping: true,
                 route: 'null',
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 5,
+                  ),
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
                   decoration: BoxDecoration(
-                    color: Colors.amberAccent,
+                    color: const Color(0xFFFFF9C4), // 奶油黄
                     borderRadius: BorderRadius.circular(30),
                   ),
                   child: Text("分类项${index + 1}"),
@@ -87,13 +87,16 @@ class _ExpandableCategoryBarState extends State<expandableCategoryBar> {
         isDeveloping: true,
         route: 'null',
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          margin: EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          margin: const EdgeInsets.symmetric(horizontal: 10),
           decoration: BoxDecoration(
-            color: Colors.lightBlueAccent,
+            color: const Color(0xFFF1F8E9), // 清新浅绿
             borderRadius: BorderRadius.circular(30),
           ),
-          child: Text(_list[a][b]),
+          child: Text(
+            _list[a][b],
+            style: const TextStyle(color: Color(0xFF2E7D32)),
+          ),
         ),
       );
     });

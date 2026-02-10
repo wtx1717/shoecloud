@@ -1,3 +1,4 @@
+import 'dart:ui'; // 用于毛玻璃模糊效果
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shoecloud/api/userinfo.dart';
@@ -41,18 +42,54 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // 背景色设为云鞋库浅绿，使 extendBody 的视觉效果更统一
+      backgroundColor: const Color(0xFFE8F5E9),
+      extendBody: true, // 允许 body 延伸到导航栏下方，实现毛玻璃透视
       //SafeArea避免刘海屏遮挡
       body: SafeArea(
+        bottom: false, // 底部悬浮设计不需要避让
         child: IndexedStack(index: _currentIndex, children: _getTabBarPages()),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: (int index) {
-          _currentIndex = index;
-          setState(() {});
-        },
-        selectedItemColor: Colors.blue,
-        currentIndex: _currentIndex,
-        items: _getTabBarWidgets(),
+      bottomNavigationBar: _buildModernTabBar(),
+    );
+  }
+
+  // 抽离出的现代化导航栏构建方法，保持原有逻辑
+  Widget _buildModernTabBar() {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(20, 0, 20, 15), // 悬浮边距
+      height: 70,
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.85),
+        borderRadius: BorderRadius.circular(35),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF2E7D32).withOpacity(0.08),
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(35),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: BottomNavigationBar(
+            onTap: (int index) {
+              _currentIndex = index;
+              setState(() {});
+            },
+            backgroundColor: Colors.transparent, // 必须透明以显示容器背景
+            elevation: 0,
+            selectedItemColor: const Color(0xFF2E7D32), // 选中的森林绿
+            unselectedItemColor: Colors.grey[400],
+            currentIndex: _currentIndex,
+            type: BottomNavigationBarType.fixed,
+            selectedFontSize: 12,
+            unselectedFontSize: 12,
+            items: _getTabBarWidgets(),
+          ),
+        ),
       ),
     );
   }
@@ -107,10 +144,12 @@ class _MainPageState extends State<MainPage> {
         "/user_${tokenManager.getUserId()}/userInfo_base.json",
       );
 
-      // 2. 转换为登录模型
-      userLogin loginBasic = detail!.toUserLogin();
-      _userController.updateFullInfo(detail);
-      _userController.updateuserLogin(loginBasic);
+      if (detail != null) {
+        // 2. 转换为登录模型
+        userLogin loginBasic = detail.toUserLogin();
+        _userController.updateFullInfo(detail);
+        _userController.updateuserLogin(loginBasic);
+      }
     }
   }
 }

@@ -155,5 +155,7 @@ class ShoeItem {
     );
   }
 
-  Object? operator [](String other) {}
+  Object? operator [](String other) {
+    return null;
+  }
 }

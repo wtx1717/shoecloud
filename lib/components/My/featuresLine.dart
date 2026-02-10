@@ -13,10 +13,22 @@ class _featuresLineState extends State<featuresLine> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
-      color: Colors.amberAccent,
-      padding: EdgeInsets.all(10),
-      child: Text(widget.title, style: TextStyle(fontSize: 16)),
+      // 保持 margin 逻辑
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            widget.title,
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+          ),
+          const Icon(Icons.chevron_right, color: Colors.grey, size: 20),
+        ],
+      ),
     );
   }
 }

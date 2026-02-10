@@ -7,19 +7,19 @@ class BetaBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 20,
-      width: 80,
+      height: 22,
+      width: 75,
       decoration: BoxDecoration(
-        color: Colors.orange,
-        borderRadius: BorderRadius.circular(10),
+        color: const Color(0xFFFFF9C4), // 改为奶油黄
+        borderRadius: BorderRadius.circular(11),
       ),
       alignment: Alignment.center,
-      child: Text(
+      child: const Text(
         '内测用户',
         style: TextStyle(
-          color: Colors.white,
+          color: Color(0xFF2E7D32), // 改为森林绿字
           fontWeight: FontWeight.bold,
-          fontSize: 12,
+          fontSize: 11,
         ),
       ),
     );

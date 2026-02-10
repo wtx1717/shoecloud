@@ -30,24 +30,30 @@ class _addNewShoeViewState extends State<addNewShoeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(child: CustomScrollView(slivers: _getScrollViewSlivers())),
+      backgroundColor: const Color(0xFFE8F5E9), // 保持背景色统一
+      body: SafeArea(
+        child: CustomScrollView(
+          physics: const BouncingScrollPhysics(),
+          slivers: _getScrollViewSlivers(),
+        ),
+      ),
     );
   }
 
   List<Widget> _getScrollViewSlivers() {
     return [
       // 顶部分类栏悬停效果
-      SliverFloatingHeader(child: expandableCategoryBar()),
-      SliverToBoxAdapter(child: SizedBox(height: 10)),
+      SliverFloatingHeader(child: const expandableCategoryBar()),
+      SliverToBoxAdapter(child: const SizedBox(height: 10)),
 
       SliverPadding(
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         sliver: SliverGrid(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3, // 每行3个
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 8,
-            childAspectRatio: 0.9,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+            childAspectRatio: 0.85,
           ),
 
           delegate: SliverChildBuilderDelegate((context, index) {

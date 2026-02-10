@@ -14,15 +14,28 @@ class SocialView extends StatefulWidget {
 class _SocialViewState extends State<SocialView> {
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(slivers: _getScrollViewSlivers());
+    return Scaffold(
+      // 延续云鞋库的背景色
+      backgroundColor: const Color(0xFFE8F5E9),
+      body: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
+        slivers: _getScrollViewSlivers(),
+      ),
+    );
   }
 
   List<Widget> _getScrollViewSlivers() {
     return [
-      SliverToBoxAdapter(child: shoeReviews()),
-      SliverToBoxAdapter(child: shoeKnowledge()),
-      SliverToBoxAdapter(child: Opensource()),
-      SliverToBoxAdapter(child: more()),
+      // 顶部留白，增加空气感
+      const SliverToBoxAdapter(child: SizedBox(height: 20)),
+
+      SliverToBoxAdapter(child: const shoeReviews()),
+      SliverToBoxAdapter(child: const shoeKnowledge()),
+      SliverToBoxAdapter(child: const Opensource()),
+      SliverToBoxAdapter(child: const more()),
+
+      // 底部留白
+      const SliverToBoxAdapter(child: SizedBox(height: 30)),
     ];
   }
 }

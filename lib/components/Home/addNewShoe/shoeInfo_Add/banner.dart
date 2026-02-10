@@ -66,7 +66,7 @@ class _bannerShoeInfo_AddState extends State<bannerShoeInfo_Add> {
                 margin: EdgeInsets.symmetric(horizontal: 5.0), // 指示器之间的间距
                 decoration: BoxDecoration(
                   color: index == _currentPage
-                      ? Colors.blue[100] // 当前页指示器颜色较亮
+                      ? const Color(0xFFFFF9C4) // 当前页指示器颜色较亮
                       : Colors.grey[300], // 其他页指示器颜色较暗
                   borderRadius: BorderRadius.circular(3), // 指示器的圆角
                 ),

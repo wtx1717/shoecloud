@@ -9,7 +9,8 @@ class cardShoeInfo_Add extends StatefulWidget {
   final String description;
   final String category;
 
-  cardShoeInfo_Add({
+  const cardShoeInfo_Add({
+    super.key,
     required this.name,
     required this.brand,
     required this.release_price,
@@ -27,16 +28,16 @@ class _cardShoeInfo_AddState extends State<cardShoeInfo_Add> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 10, left: 10, right: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _getShoeName(),
-          SizedBox(height: 10),
-          _getBrand_ReleasePrice_ReleaseYear(),
-          SizedBox(height: 10),
-          _getFeatures_Category(),
-          SizedBox(height: 10),
+          const SizedBox(height: 15),
+          _getTagsRow(), // 品牌、年份、价格标签化
+          const SizedBox(height: 15),
+          _getFeaturesGrid(), // 功能特性展示
+          const SizedBox(height: 20),
           _getDescription(),
         ],
       ),
@@ -47,39 +48,93 @@ class _cardShoeInfo_AddState extends State<cardShoeInfo_Add> {
     return Center(
       child: Text(
         widget.name,
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+          fontSize: 22,
+          fontWeight: FontWeight.w900,
+          color: Color(0xFF2E7D32),
+          letterSpacing: 0.5,
+        ),
       ),
     );
   }
 
-  // ignore: non_constant_identifier_names
-  Widget _getBrand_ReleasePrice_ReleaseYear() {
-    return Center(
+  // 品牌、年份、价格采用小气泡样式
+  Widget _getTagsRow() {
+    return Wrap(
+      alignment: WrapAlignment.center,
+      spacing: 10,
+      runSpacing: 10,
+      children: [
+        _buildTag(widget.brand, const Color(0xFFFFF9C4)), // 奶油黄
+        _buildTag("${widget.release_year}年", const Color(0xFFF1F8E9)),
+        _buildTag("￥${widget.release_price}", const Color(0xFFF1F8E9)),
+        _buildTag(widget.category, const Color(0xFFE8F5E9)),
+      ],
+    );
+  }
+
+  Widget _buildTag(String text, Color bgColor) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Text(
-        "品牌: ${widget.brand} | 发售价格: ${widget.release_price}元 | 上市时间: ${widget.release_year}年",
-        style: TextStyle(fontSize: 16, color: Colors.grey),
+        text,
+        style: const TextStyle(
+          fontSize: 13,
+          color: Color(0xFF2E7D32),
+          fontWeight: FontWeight.w600,
+        ),
       ),
     );
   }
 
-  // ignore: non_constant_identifier_names
-  Widget _getFeatures_Category() {
+  // 功能特性展示
+  Widget _getFeaturesGrid() {
     return Center(
       child: Text(
-        "功能: ${widget.features.join(", ")}  |  类别: ${widget.category}",
-        style: TextStyle(fontSize: 16, color: Colors.grey),
+        "核心功能: ${widget.features.join(" · ")}",
+        style: const TextStyle(
+          fontSize: 14,
+          color: Colors.green,
+          fontWeight: FontWeight.w500,
+        ),
       ),
     );
   }
 
   Widget _getDescription() {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20),
-      child: Center(
-        child: Text(
-          "描述: ${widget.description}",
-          style: TextStyle(fontSize: 16, color: Colors.grey),
-        ),
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.7),
+        borderRadius: BorderRadius.circular(25),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "跑鞋详情",
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF2E7D32),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            widget.description,
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.black.withOpacity(0.6),
+              height: 1.6,
+            ),
+          ),
+        ],
       ),
     );
   }

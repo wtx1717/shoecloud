@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// ignore: camel_case_types
 class shoeInfoMin extends StatefulWidget {
   final String shoeName;
   final String imageUrl;
@@ -14,31 +13,52 @@ class shoeInfoMin extends StatefulWidget {
   State<shoeInfoMin> createState() => _shoeInfoMinState();
 }
 
-// ignore: camel_case_types
 class _shoeInfoMinState extends State<shoeInfoMin> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.greenAccent[100],
-      ),
-
-      child: Column(
-        children: [
-          Image.network(
-            widget.imageUrl,
-            height: 80,
-            width: 80,
-            fit: BoxFit.cover,
+        borderRadius: BorderRadius.circular(24), // 更圆润的角
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFF2E7D32).withOpacity(0.03),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
           ),
-          SizedBox(height: 10),
-          Text(
-            widget.shoeName,
-            style: TextStyle(fontSize: 10, color: Colors.black),
-            overflow: TextOverflow.ellipsis, // 关键属性
-            maxLines: 1,
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // 图片容器增加一点点奶油黄光晕
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: const BoxDecoration(
+              color: Color(0xFFFFFDE7), // 极淡黄
+              shape: BoxShape.circle,
+            ),
+            child: Image.network(
+              widget.imageUrl,
+              height: 80,
+              width: 80,
+              fit: BoxFit.contain, // 保持鞋子比例
+            ),
+          ),
+          const SizedBox(height: 12),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Text(
+              widget.shoeName,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 11,
+                color: Color(0xFF2E7D32),
+                fontWeight: FontWeight.w500,
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
           ),
         ],
       ),
