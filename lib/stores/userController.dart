@@ -14,5 +14,6 @@ class UserController extends GetxController {
 
   void updateFullInfo(UserInfoModel newFullInfo) {
     fullInfo.value = newFullInfo;
+    fullInfo.refresh(); //刷新，触发更新
   }
 }

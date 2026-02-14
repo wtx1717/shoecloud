@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:shoecloud/api/userInfo.dart';
 import 'package:shoecloud/components/My/userInfoEdit/professionalDatePicker.dart';
+import 'package:shoecloud/stores/userController.dart';
+import 'package:shoecloud/utils/dialog.dart';
 
 class editItemWrapper extends StatefulWidget {
   final String label;
@@ -22,6 +26,7 @@ class editItemWrapper extends StatefulWidget {
 class _editItemWrapperState extends State<editItemWrapper> {
   // 临时存储日期，用户点确定时才真正生效
   DateTime _tempSelectedDate = DateTime(2000, 1, 1);
+  UserController _userController = Get.find();
 
   void _handleTap() {
     if (!widget.isCanEdit) return;
@@ -43,9 +48,35 @@ class _editItemWrapperState extends State<editItemWrapper> {
         actions: ["男", "女", "未知"]
             .map(
               (g) => CupertinoActionSheetAction(
-                onPressed: () {
-                  print("【性别修改】: $g");
+                onPressed: () async {
+                  // A. 先关闭弹出的 ActionSheet
                   Navigator.pop(context);
+
+                  // B. 发送请求
+                  bool success = await updateUserInfoAPI(
+                    _userController.loginInfo.value.userId,
+                    {"gender": g},
+                  );
+
+                  // C. 使用外层的 context 弹出对话框
+                  if (success) {
+                    // 1. 获取当前内存对象
+                    var full = _userController.fullInfo.value;
+                    if (full != null) {
+                      // 2. 手动修改性别字段
+                      full.baseInfo.gender = g;
+                      // 3. 触发同步和刷新
+                      _userController.updateFullInfo(full);
+                    }
+                    _userController.updateFullInfo(
+                      _userController.fullInfo.value!,
+                    );
+                    MyDialog.showSuccess(context, "信息已同步至服务器");
+                    debugPrint("【性别修改】成功");
+                  } else {
+                    MyDialog.showError(context, "同步失败，请检查网络");
+                    debugPrint("【性别修改】失败");
+                  }
                 },
                 child: Text(
                   g,
@@ -70,14 +101,41 @@ class _editItemWrapperState extends State<editItemWrapper> {
       builder: (context) => professionalDatePicker(
         initialDate: _tempSelectedDate,
         label: widget.label,
-        onConfirm: (finalDate) {
+        onConfirm: (finalDate) async {
           setState(() {
             _tempSelectedDate = finalDate;
           });
-          print(
-            "【最终确定日期】: ${finalDate.year}-${finalDate.month}-${finalDate.day}",
-          );
+
+          // 先关闭弹出的日期选择器
           Navigator.pop(context);
+
+          // 发送请求
+          bool success = await updateUserInfoAPI(
+            _userController.loginInfo.value.userId,
+            {"birthday": finalDate.toString()},
+          );
+
+          // 弹出对话框
+          if (success) {
+            // 1. 获取当前内存对象
+            var full = _userController.fullInfo.value;
+            if (full != null) {
+              // 2. 手动修改生日字段
+              // 提示：最好只取 yyyy-MM-dd 部分，避免 toString() 带出微秒
+              String formattedDate =
+                  "${finalDate.year}-${finalDate.month.toString().padLeft(2, '0')}-${finalDate.day.toString().padLeft(2, '0')}";
+              full.baseInfo.birthday = formattedDate;
+
+              // 3. 触发同步和刷新
+              _userController.updateFullInfo(full);
+            }
+            _userController.updateFullInfo(_userController.fullInfo.value!);
+            MyDialog.showSuccess(context, "信息已同步至服务器");
+            debugPrint("【生日修改】成功");
+          } else {
+            MyDialog.showError(context, "同步失败，请检查网络");
+            debugPrint("【生日修改】失败");
+          }
         },
       ),
     );
@@ -92,13 +150,13 @@ class _editItemWrapperState extends State<editItemWrapper> {
 
     // 根据 label 判断单位
     String unit = "";
-    if (widget.label.contains("身高"))
+    if (widget.label.contains("身高")) {
       unit = "cm";
-    else if (widget.label.contains("体重"))
+    } else if (widget.label.contains("体重")) {
       unit = "kg";
-    else if (widget.label.contains("鞋码"))
+    } else if (widget.label.contains("鞋码")) {
       unit = "EUR";
-
+    }
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -139,10 +197,65 @@ class _editItemWrapperState extends State<editItemWrapper> {
             child: const Text("取消", style: TextStyle(color: Colors.grey)),
           ),
           ElevatedButton(
-            onPressed: () {
-              // 这里打印的结果就是：数值 + 单位
-              print("【数据修改】${widget.label}: ${ctrl.text} $unit");
+            onPressed: () async {
+              // 先关闭弹出的输入框
               Navigator.pop(context);
+
+              // --- 1. 翻译 Key 和 转换 Value ---
+              String apiKey = "";
+              dynamic apiValue; // 后端需要的是数字或特定字符串
+
+              if (widget.label.contains("身高")) {
+                apiKey = "height";
+                apiValue = double.tryParse(ctrl.text) ?? 0.0;
+              } else if (widget.label.contains("体重")) {
+                apiKey = "weight";
+                apiValue = double.tryParse(ctrl.text) ?? 0.0;
+              } else if (widget.label.contains("鞋码")) {
+                apiKey = "shoeSize";
+                apiValue = double.tryParse(ctrl.text) ?? 0.0;
+              } else if (widget.label.contains("用户名") ||
+                  widget.label.contains("昵称") ||
+                  widget.label.contains("姓名")) {
+                apiKey = "userName";
+                apiValue = ctrl.text;
+              }
+
+              // --- 2. 发送请求 ---
+              bool success = await updateUserInfoAPI(
+                _userController.loginInfo.value.userId,
+                {apiKey: apiValue}, // 这样后端才能精准识别
+              );
+
+              // 弹出对话框
+              if (success) {
+                // 1. 获取当前 Controller 里的完整对象
+                var full = _userController.fullInfo.value;
+
+                if (full != null) {
+                  // 2. 根据修改的 Key，手动更新内存中的值
+                  // 这样 Obx 监测的对象内部数据才会发生变化
+                  if (apiKey == "userName") full.baseInfo.userName = apiValue;
+                  if (apiKey == "gender") full.baseInfo.gender = apiValue;
+                  if (apiKey == "birthday") full.baseInfo.birthday = apiValue;
+
+                  if (apiKey == "height") full.physicalStats.height = apiValue;
+                  if (apiKey == "weight") full.physicalStats.weight = apiValue;
+                  if (apiKey == "shoeSize") {
+                    full.physicalStats.shoeSize = apiValue;
+                  }
+
+                  // 3. 发射刷新信号！
+                  // 只有调用了 updateFullInfo 并执行了 refresh()，上面的 Obx 才会发现数据变了
+                  _userController.updateFullInfo(full);
+                }
+                MyDialog.showSuccess(context, "信息已同步至服务器");
+                debugPrint("【${widget.label}修改】成功");
+                _userController.updateFullInfo(_userController.fullInfo.value!);
+              } else {
+                MyDialog.showError(context, "同步失败，请检查网络");
+                debugPrint("【${widget.label}修改】失败");
+              }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF2E7D32),

@@ -55,8 +55,7 @@ Future<ShoeInfo?> getSingleShoeByIdAPI(String shoeId) async {
   try {
     // 直接拼接路径请求
     final String url =
-        HttpConstants.USERINFO +
-        "/user_example/shoes/shoe_$shoeId/shoe_$shoeId.json";
+        "${HttpConstants.USERINFO}/user_example/shoes/shoe_$shoeId/shoe_$shoeId.json";
     final response = await dioRequest.get(url);
 
     if (response != null && response is Map<String, dynamic>) {

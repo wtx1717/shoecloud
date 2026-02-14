@@ -40,3 +40,45 @@ Future<UserInfoModel?> getUserInfoAPI(String infoUrl) async {
   // 若返回数据格式非 Map 或为空，判定为数据获取失效。
   return null;
 }
+
+/// 修改用户详细信息 API
+///
+/// [说明]：
+/// 对接 Python 后端服务，支持手术级修改 JSON 文件中的特定字段。
+///
+/// [参数]：
+/// - [userId] 用户唯一 ID (对应服务器文件夹名 user_{userId})
+/// - [updateFields] 需要修改的字段 Map。
+///   例如：{"userName": "新昵称"} 或 {"height": 185.5, "weight": 70.0}
+///
+/// [返回值]：
+/// - 修改成功：返回 true
+/// - 修改失败或异常：返回 false
+Future<bool> updateUserInfoAPI(
+  String userId,
+  Map<String, dynamic> updateFields,
+) async {
+  try {
+    // 1. 组装请求参数
+    // 必须包含 userId，其余字段通过解构赋值混入
+    final Map<String, dynamic> params = {"userId": userId, ...updateFields};
+
+    // 2. 发起 POST 请求
+    // 注意：HttpConstants.UPDATE_USERINFO 需要你在 constants 里定义为 "/update_user_info"
+    final response = await dioRequest.post(
+      HttpConstants.UPDATE_USERINFO,
+      params: params,
+    );
+
+    // 3. 根据你的 DioRequest 逻辑：
+    // 如果 code == 1，handleResponse 会返回 data["result"]
+    // 如果 code != 1，handleResponse 会直接抛出 Exception 进入下面的 catch
+    if (response != null) {
+      return true;
+    }
+    return false;
+  } catch (e) {
+    print("修改用户信息失败 API 异常: $e");
+    return false;
+  }
+}

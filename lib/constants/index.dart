@@ -12,4 +12,5 @@ class HttpConstants {
       "/uploadtest/config/addShoeInfoExample.json";
   static const String LOGIN = "/login/user_info.json";
   static const String USERINFO = "/userInfo";
+  static const String UPDATE_USERINFO = "/update_user_info";
 }
