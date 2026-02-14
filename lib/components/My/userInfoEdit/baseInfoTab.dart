@@ -40,7 +40,11 @@ class _baseInfoTabState extends State<baseInfoTab> {
         ),
         const SizedBox(height: 30),
         editItemWrapper(label: "用户名", value: widget.base.userName),
-        editItemWrapper(label: "账号", value: widget.base.account),
+        editItemWrapper(
+          label: "账号",
+          value: widget.base.account,
+          isCanEdit: false,
+        ),
         editItemWrapper(label: "性别", value: widget.base.gender),
         editItemWrapper(label: "生日", value: widget.base.birthday),
         editItemWrapper(
