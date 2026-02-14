@@ -40,8 +40,8 @@ class _shoeInfoMinState extends State<shoeInfoMin> {
             ),
             child: Image.network(
               widget.imageUrl,
-              height: 80,
-              width: 80,
+              height: 60,
+              width: 60,
               fit: BoxFit.contain, // 保持鞋子比例
             ),
           ),

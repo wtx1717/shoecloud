@@ -122,14 +122,18 @@ class _shoeOverviewCardState extends State<shoeOverviewCard> {
             // 3. 数据行
             Row(
               children: [
-                _buildSmallStat(
-                  Icons.straighten,
-                  "${widget.totalDistance ?? '0'} km",
+                Expanded(
+                  child: _buildSmallStat(
+                    Icons.straighten,
+                    "${widget.totalDistance ?? '0'} km",
+                  ),
                 ),
-                const SizedBox(width: 15),
-                _buildSmallStat(
-                  Icons.access_time,
-                  TimeUtils.formatToChinese(widget.totalTime ?? 0),
+                const SizedBox(width: 5),
+                Expanded(
+                  child: _buildSmallStat(
+                    Icons.access_time,
+                    TimeUtils.formatToChinese(widget.totalTime ?? 0),
+                  ),
                 ),
               ],
             ),
@@ -145,12 +149,17 @@ class _shoeOverviewCardState extends State<shoeOverviewCard> {
       children: [
         Icon(icon, size: 14, color: textDark.withOpacity(0.5)),
         const SizedBox(width: 4),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-            color: textDark.withOpacity(0.8),
+        // 用 Expanded 包住 Text
+        Expanded(
+          child: Text(
+            label,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1, // 必须指定为 1 行，省略号才会出现
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: textDark.withOpacity(0.8),
+            ),
           ),
         ),
       ],
