@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:shoecloud/constants/index.dart';
 import 'package:shoecloud/utils/DioRequest.dart';
 import 'package:shoecloud/viewmodels/shoeInfo.dart';
@@ -65,4 +67,53 @@ Future<ShoeInfo?> getSingleShoeByIdAPI(String shoeId) async {
     print("NFC单条查询失败: $e");
   }
   return null;
+}
+
+class ShoeUpdateUtils {
+  /// 生成唯一的鞋子 ID (时间戳 + 3位随机数)
+  static String generateShoeId() {
+    final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
+    final random = Random().nextInt(900) + 100; // 100-999
+    return "$timestamp$random";
+  }
+
+  /// 构建存储路径
+  /// 格式如：/user_1/shoes/shoe_123456/shoe_123456.json
+  static String getDetailUrl(String userId, String shoeId) {
+    return "/user_$userId/shoes/shoe_$shoeId/shoe_$shoeId.json";
+  }
+}
+
+/// 更新用户信息基础索引文件 (userInfo_base.json)
+///
+/// [参数]:
+/// - [userId]: 当前用户ID
+/// - [newShoeName]: 跑鞋型号名称
+/// - [newShoeId]: 预先生成的唯一ID
+Future<bool> updateUserBaseIndexAPI({
+  required String userId,
+  required String newShoeName,
+  required String newShoeId,
+  required Map<String, dynamic> fullDetail, // 新增：传入详细信息
+}) async {
+  try {
+    final Map<String, dynamic> updatePayload = {
+      "userId": userId,
+      "newEntry": {
+        "shoeId": newShoeId,
+        "shoeName": newShoeName,
+        "detailUrl": ShoeUpdateUtils.getDetailUrl(userId, newShoeId),
+      },
+      "fullDetail": fullDetail, // 补全后端需要的字段
+    };
+
+    final response = await dioRequest.post(
+      HttpConstants.ADD_NEWSHOE,
+      params: updatePayload,
+    );
+    return true;
+  } catch (e) {
+    print("修改 userInfo_base.json 索引失败: $e");
+    return false;
+  }
 }

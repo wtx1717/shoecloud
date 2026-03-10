@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shoecloud/api/userInfo.dart';
 import 'package:shoecloud/components/My/userInfoEdit/professionalDatePicker.dart';
 import 'package:shoecloud/stores/userController.dart';
 import 'package:shoecloud/utils/dialog.dart';
 
+// ignore: camel_case_types
 class editItemWrapper extends StatefulWidget {
   final String label;
   final String value;
@@ -23,10 +23,11 @@ class editItemWrapper extends StatefulWidget {
   State<editItemWrapper> createState() => _editItemWrapperState();
 }
 
+// ignore: camel_case_types
 class _editItemWrapperState extends State<editItemWrapper> {
   // 临时存储日期，用户点确定时才真正生效
   DateTime _tempSelectedDate = DateTime(2000, 1, 1);
-  UserController _userController = Get.find();
+  final UserController _userController = Get.find();
 
   void _handleTap() {
     if (!widget.isCanEdit) return;
@@ -71,9 +72,11 @@ class _editItemWrapperState extends State<editItemWrapper> {
                     _userController.updateFullInfo(
                       _userController.fullInfo.value!,
                     );
+                    // ignore: use_build_context_synchronously
                     MyDialog.showSuccess(context, "信息已同步至服务器");
                     debugPrint("【性别修改】成功");
                   } else {
+                    // ignore: use_build_context_synchronously
                     MyDialog.showError(context, "同步失败，请检查网络");
                     debugPrint("【性别修改】失败");
                   }

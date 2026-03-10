@@ -6,9 +6,11 @@ import 'package:shoecloud/viewmodels/addShoeInfo.dart';
 
 /// 获取“新增鞋子信息”列表的 API
 ///
+// ignore: unintended_html_in_doc_comment
 /// 返回值：Future<List<addShoeInfo>>
 /// 功能说明：
 /// 1. 使用 `dioRequest.get` 向 `HttpConstants.BANNER_LIST` 发起 GET 请求。
+// ignore: unintended_html_in_doc_comment
 /// 2. 假设后端返回一个 List（每个元素为 Map<String, dynamic>）。
 /// 3. 将每一项 Map 转换为 `addShoeInfo` 对象（通过 `formJSON` 构造器）。
 /// 4. 将转换后的 Iterable 转为 List 并返回给业务层。

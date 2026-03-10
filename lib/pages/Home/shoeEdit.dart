@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shoecloud/api/shoeInfo.dart';
 import 'package:shoecloud/components/Home/addNewShoe/editFormField.dart';
 import 'package:shoecloud/components/Home/addNewShoe/shoeInfo_Add/bindNFCBottom.dart';
 import 'package:shoecloud/stores/userController.dart';
@@ -175,58 +176,81 @@ class _shoeEditViewState extends State<shoeEditView> {
     );
   }
 
-  // 仅添加逻辑
   void _handlePureAdd() async {
-    print("逻辑：执行纯存盘操作");
-    _showSuccessDialog();
-    await Future.delayed(const Duration(milliseconds: 1000));
-    if (mounted) {
-      Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
-    }
-  }
+    final userId = _userController.loginInfo.value.userId;
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final rawName = args?['name'] ?? "未知型号";
 
-  void _showSuccessDialog() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => Center(
-        child: Container(
-          padding: const EdgeInsets.all(30),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: const Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.check_circle_rounded,
-                color: Color(0xFF2E7D32),
-                size: 80,
-              ),
-              SizedBox(height: 20),
-              Text(
-                "添加成功",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF2E7D32),
-                  decoration: TextDecoration.none,
-                ),
-              ),
-              SizedBox(height: 10),
-              Text(
-                "新跑鞋已存入您的云鞋库",
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey,
-                  decoration: TextDecoration.none,
-                ),
+    final String newShoeId = ShoeUpdateUtils.generateShoeId();
+
+    final Map<String, dynamic> fullDetail = {
+      "code": "1",
+      "msg": "success",
+      "result": {
+        "shoe_id": newShoeId,
+        "shoe_name": rawName,
+        "brand": args?['brand'] ?? "未知品牌",
+        "nickname": _nicknameController.text.isEmpty
+            ? rawName
+            : _nicknameController.text,
+        "size": double.tryParse(_sizeController.text) ?? 42.5,
+        "purchase_price":
+            double.tryParse(_priceController.text) ??
+            (args?['release_price']?.toDouble() ?? 0.0),
+        "retail_price": args?['release_price']?.toDouble() ?? 0.0,
+        "release_year": args?['release_year'] ?? 2024,
+        "category": args?['category'] ?? "跑鞋",
+        "description": args?['description'] ?? "",
+        "imagesUrl": (args?['imagesUrl'] is List)
+            ? args!['imagesUrl']
+            : [args?['image_url'] ?? ""],
+        "features": args?['features'] ?? ["专业避震"],
+        "is_retired": false,
+        "bind_time": DateTime.now().toString().split('.')[0],
+      },
+    };
+
+    bool isSuccess = await updateUserBaseIndexAPI(
+      userId: userId,
+      newShoeName: rawName,
+      newShoeId: newShoeId,
+      fullDetail: fullDetail,
+    );
+
+    if (isSuccess) {
+      showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("添加成功"),
+            content: const Text("您的新跑鞋已成功同步至云端！"),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(), // 关闭弹窗
+                child: const Text("好的"),
               ),
             ],
-          ),
-        ),
-      ),
-    );
+          );
+        },
+      ).then((_) async {
+        // --- 这里是原生 Navigator 跳转逻辑 ---
+
+        // 1. 同步内存数据
+        await _userController.refreshUserInfo();
+
+        if (mounted) {
+          // 2. 使用原生方式回退到首页并清空栈
+          // '/' 是你定义的首页路由名
+          Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+        }
+      });
+    } else {
+      // 失败逻辑保持不变
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("同步失败，请检查网络")));
+    }
   }
 }
