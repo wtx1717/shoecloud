@@ -114,3 +114,43 @@ Future<bool> updateUserBaseIndexAPI({
     return false;
   }
 }
+
+/// 修改跑鞋详情信息
+Future<bool> updateShoeDetailAPI({
+  required String userId,
+  required String shoeId,
+  required Map<String, dynamic> newInfo,
+}) async {
+  try {
+    // 如果 _handleResponse 校验失败，它会直接 throw Exception 进入 catch
+    await dioRequest.post(
+      "/update_shoe_detail",
+      params: {
+        "user_id": userId,
+        "shoe_id": shoeId,
+        "new_info": newInfo,
+      },
+    );
+    return true; // 走到这里说明 code 一定是 SUCCESS_CODE
+  } catch (e) {
+    print("更新跑鞋详情失败: $e");
+    return false;
+  }
+}
+
+/// 删除跑鞋
+Future<bool> deleteShoeAPI({
+  required String userId,
+  required String shoeId,
+}) async {
+  try {
+    await dioRequest.post(
+      "/delete_shoe",
+      params: { "user_id": userId, "shoe_id": shoeId },
+    );
+    return true; 
+  } catch (e) {
+    print("删除跑鞋失败: $e");
+    return false;
+  }
+}
