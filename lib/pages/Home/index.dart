@@ -24,34 +24,30 @@ class _HomeViewState extends State<HomeView> {
   List<ShoeInfo> _shoesList = [];
   bool _isDetailsLoading = true;
 
+  
   @override
   Widget build(BuildContext context) {
     return Obx(() {
       var info = _userController.fullInfo.value;
+      if (tokenManager.getToken().isEmpty) return firstUse();
+      if (info == null) return const Center(child: CircularProgressIndicator());
+      if (info.accountSummary.shoesCount == 0) return firstUse();
 
-      if (tokenManager.getToken().isEmpty) {
-        return firstUse();
-      }
-
-      // 第一层闸门：等用户信息
-      if (info == null) {
-        return const Center(child: CircularProgressIndicator());
-      }
-
-      // 如果没鞋子，直接去新手引导
-      if (info.accountSummary.shoesCount == 0) {
-        return firstUse();
-      }
-
-      // 第二层闸门：用户信息有了，但详情数据还没回来
-      // 我们在第一次监听到 info 有值时，去触发加载详情
+      // 如果正在加载，显示转圈圈
       if (_shoesList.isEmpty && _isDetailsLoading) {
-        _loadShoeData(); // 异步获取详情
+        _loadShoeData(); 
         return const Center(child: CircularProgressIndicator(strokeWidth: 2));
       }
 
-      // 第三层：数据全齐了，展示滚动列表
-      return CustomScrollView(slivers: _getScrollViewSlivers());
+      // 【关键修改】使用 RefreshIndicator 实现下拉刷新
+      return RefreshIndicator(
+        onRefresh: onRefresh, // 绑定下拉动作
+        color: const Color(0xFF2E7D32),
+        child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(), // 确保内容不满也能下拉
+          slivers: _getScrollViewSlivers()
+        ),
+      );
     });
   }
 
@@ -84,7 +80,7 @@ class _HomeViewState extends State<HomeView> {
               ),
             );
           },
-          childCount: _userController.fullInfo.value?.accountSummary.shoesCount,
+          childCount: _shoesList.length,
         ),
       ),
       SliverToBoxAdapter(child: SizedBox(height: 100)),
@@ -108,5 +104,21 @@ class _HomeViewState extends State<HomeView> {
       debugPrint("获取跑鞋详情失败: $e");
       if (mounted) setState(() => _isDetailsLoading = false);
     }
+  }
+
+  // 【新增】提供给外部或下拉刷新的统一入口
+  Future<void> onRefresh() async {
+    if (mounted) {
+      setState(() {
+        _isDetailsLoading = true;
+        _shoesList = []; // 清空旧数据，强制显示加载动画
+      });
+    }
+    
+    // 1. 先刷 UserController 的基础信息
+    await _userController.refreshUserInfo();
+    
+    // 2. 再刷详情（这会调用你原本的 _loadShoeData 逻辑）
+    await _loadShoeData();
   }
 }

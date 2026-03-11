@@ -21,24 +21,25 @@ class UserController extends GetxController {
 
   /// 【新增】主动从服务器同步最新的用户信息
   Future<void> refreshUserInfo() async {
-    if (loginInfo.value.userId.isEmpty) return;
+  if (loginInfo.value.userId.isEmpty) return;
 
-    try {
-      // 构建请求路径，例如：/userInfo/user_1/userInfo_base.json
-      final String url =
-          "${HttpConstants.USERINFO}/user_${loginInfo.value.userId}/userInfo_base.json";
+  try {
+    // 【关键修改】在 URL 后面拼接时间戳 t=${DateTime.now().millisecondsSinceEpoch}
+    final String url = 
+        "${HttpConstants.USERINFO}/user_${loginInfo.value.userId}/userInfo_base.json?t=${DateTime.now().millisecondsSinceEpoch}";
 
-      // 注意：这里使用 dioRequest.get，它已经处理了 code == "1" 并返回 result 部分
-      final response = await dioRequest.get(url);
+    print("DEBUG: 正在请求最新数据，URL: $url"); // 你会发现每次请求的后缀都不同
 
-      if (response != null) {
-        // 将最新的 JSON 重新解析为模型
-        final updatedInfo = UserInfoModel.formJSON(response);
-        // 更新响应式变量，首页的 Obx 就会立刻检测到 shoesCount 变了！
-        fullInfo.value = updatedInfo;
-      }
-    } catch (e) {
-      print("UserController 同步用户信息失败: $e");
+    final response = await dioRequest.get(url);
+
+    if (response != null) {
+      final updatedInfo = UserInfoModel.formJSON(response);
+      fullInfo.value = updatedInfo;
+      fullInfo.refresh(); 
+      print("DEBUG: 内存数据已更新，当前鞋子数: ${updatedInfo.accountSummary.shoesCount}");
     }
+  } catch (e) {
+    print("UserController 同步失败: $e");
   }
+}
 }

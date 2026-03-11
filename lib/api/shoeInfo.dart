@@ -18,36 +18,31 @@ import 'package:shoecloud/viewmodels/userInfo.dart';
 /// - 请求成功：返回 [List<ShoeInfo>] 跑鞋详细模型数组
 /// - 若部分请求失败：会过滤掉失败的项，仅返回加载成功的数据
 Future<List<ShoeInfo>> getShoeInfoAPI(List<ShoeItem> shoesList) async {
-  // 1. 如果列表为空，直接返回空数组
   if (shoesList.isEmpty) return [];
 
   try {
-    // 2. 将索引列表映射为一组 Future 请求任务
-    // 使用 GET 方法请求每一个 detailUrl
+    // 【核心修改】：给每一个详情请求 URL 都加上时间戳，破除 Nginx/服务器缓存
+    final String timestamp = "?t=${DateTime.now().millisecondsSinceEpoch}";
+
     final List<Future<dynamic>> requests = shoesList.map((item) {
-      return dioRequest.get(HttpConstants.USERINFO + item.detailUrl);
+      // 拼接 URL 时强行加入随机后缀
+      return dioRequest.get(HttpConstants.USERINFO + item.detailUrl + timestamp);
     }).toList();
 
-    // 3. 并发执行所有请求
-    // Future.wait 会等待所有网络请求返回结果
     final List<dynamic> responses = await Future.wait(requests);
 
-    // 4. 解析结果并过滤异常
     List<ShoeInfo> resultList = [];
     for (var response in responses) {
       if (response != null && response is Map<String, dynamic>) {
         try {
-          // 将每一个成功的响应转化为 ShoeInfo 模型
           resultList.add(ShoeInfo.formJSON(response));
         } catch (e) {
           print("单条跑鞋数据解析失败: $e");
         }
       }
     }
-
     return resultList;
   } catch (e) {
-    // 5. 全局异常处理
     print("批量获取跑鞋详情时发生网络错误: $e");
     return [];
   }
@@ -55,9 +50,10 @@ Future<List<ShoeInfo>> getShoeInfoAPI(List<ShoeItem> shoesList) async {
 
 Future<ShoeInfo?> getSingleShoeByIdAPI(String shoeId) async {
   try {
-    // 直接拼接路径请求
+    final String timestamp = "?t=${DateTime.now().millisecondsSinceEpoch}";
     final String url =
-        "${HttpConstants.USERINFO}/user_example/shoes/shoe_$shoeId/shoe_$shoeId.json";
+        "${HttpConstants.USERINFO}/user_example/shoes/shoe_$shoeId/shoe_$shoeId.json$timestamp";
+    
     final response = await dioRequest.get(url);
 
     if (response != null && response is Map<String, dynamic>) {
@@ -94,7 +90,7 @@ Future<bool> updateUserBaseIndexAPI({
   required String userId,
   required String newShoeName,
   required String newShoeId,
-  required Map<String, dynamic> fullDetail, // 新增：传入详细信息
+  required Map<String, dynamic> fullDetail,
 }) async {
   try {
     final Map<String, dynamic> updatePayload = {
@@ -104,10 +100,11 @@ Future<bool> updateUserBaseIndexAPI({
         "shoeName": newShoeName,
         "detailUrl": ShoeUpdateUtils.getDetailUrl(userId, newShoeId),
       },
-      "fullDetail": fullDetail, // 补全后端需要的字段
+      "fullDetail": fullDetail,
     };
 
-    final response = await dioRequest.post(
+    // POST 请求通常不会被缓存，但要确保后端处理完后立即释放文件锁
+    await dioRequest.post(
       HttpConstants.ADD_NEWSHOE,
       params: updatePayload,
     );

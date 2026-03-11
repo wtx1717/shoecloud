@@ -235,14 +235,13 @@ class _shoeEditViewState extends State<shoeEditView> {
           );
         },
       ).then((_) async {
-        // --- 这里是原生 Navigator 跳转逻辑 ---
-
-        // 1. 同步内存数据
+        // 1. 确保内存里的基础数据是最新的
         await _userController.refreshUserInfo();
 
         if (mounted) {
-          // 2. 使用原生方式回退到首页并清空栈
-          // '/' 是你定义的首页路由名
+          // 2. 跳转回首页
+          // 因为 pushNamedAndRemoveUntil 会销毁旧的 HomeView 实例
+          // 新的 HomeView 实例会触发新的 initState，从而触发新的数据加载
           Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
         }
       });
