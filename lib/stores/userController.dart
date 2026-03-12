@@ -21,25 +21,27 @@ class UserController extends GetxController {
 
   /// 【新增】主动从服务器同步最新的用户信息
   Future<void> refreshUserInfo() async {
-  if (loginInfo.value.userId.isEmpty) return;
+    if (loginInfo.value.userId.isEmpty) return;
 
-  try {
-    // 【关键修改】在 URL 后面拼接时间戳 t=${DateTime.now().millisecondsSinceEpoch}
-    final String url = 
-        "${HttpConstants.USERINFO}/user_${loginInfo.value.userId}/userInfo_base.json?t=${DateTime.now().millisecondsSinceEpoch}";
+    try {
+      // 【关键修改】在 URL 后面拼接时间戳 t=${DateTime.now().millisecondsSinceEpoch}
+      final String url =
+          "${HttpConstants.USERINFO}/user_${loginInfo.value.userId}/userInfo_base.json?t=${DateTime.now().millisecondsSinceEpoch}";
 
-    print("DEBUG: 正在请求最新数据，URL: $url"); // 你会发现每次请求的后缀都不同
+      print("DEBUG: 正在请求最新数据，URL: $url"); // 你会发现每次请求的后缀都不同
 
-    final response = await dioRequest.get(url);
+      final response = await dioRequest.get(url);
 
-    if (response != null) {
-      final updatedInfo = UserInfoModel.formJSON(response);
-      fullInfo.value = updatedInfo;
-      fullInfo.refresh(); 
-      print("DEBUG: 内存数据已更新，当前鞋子数: ${updatedInfo.accountSummary.shoesCount}");
+      if (response != null) {
+        final updatedInfo = UserInfoModel.formJSON(response);
+        fullInfo.value = updatedInfo;
+        fullInfo.refresh();
+        print("DEBUG: 内存数据已更新，当前鞋子数: ${updatedInfo.accountSummary.shoesCount}");
+      }
+    } catch (e) {
+      print("UserController 同步失败: $e");
     }
-  } catch (e) {
-    print("UserController 同步失败: $e");
   }
-}
+
+  Future<void> refreshUserData() async {}
 }
