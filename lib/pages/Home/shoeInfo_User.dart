@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shoecloud/api/shoeInfo.dart'; // 确保导入了 getSingleShoeByIdAPI
 import 'package:shoecloud/api/syncActivity.dart';
@@ -24,6 +25,7 @@ class _shoeInfo_UserViewState extends State<shoeInfo_UserView> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
   bool _isSyncing = false;
+  bool _hasAutoSynced = false; // 状态锁，防止页面刷新时重复触发
 
   ShoeInfo? _currentShoe; // 用于管理当前显示的鞋子数据
   bool _isInitialized = false;
@@ -31,11 +33,26 @@ class _shoeInfo_UserViewState extends State<shoeInfo_UserView> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // 仅在初始化时从路由获取一次数据
+
     if (!_isInitialized) {
       final args =
           ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
       _currentShoe = args?['shoeInfo'] as ShoeInfo?;
+
+      // --- 伟大的一步：检测 NFC 信号并自动同步 ---
+      bool fromNfc = args?['fromNfc'] ?? false;
+
+      if (fromNfc && !_hasAutoSynced) {
+        _hasAutoSynced = true;
+
+        // 使用 PostFrameCallback 确保页面 UI 渲染完再弹窗，避免 context 报错
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          // 增加一点仪式感提示
+          _showSafeToast("NFC 感应成功，正在检查运动记录...");
+          _handleSyncFlow(); // 执行我们写好的同步大逻辑
+        });
+      }
+
       _isInitialized = true;
     }
   }
@@ -143,6 +160,9 @@ class _shoeInfo_UserViewState extends State<shoeInfo_UserView> {
 
   // 在 _shoeInfo_UserViewState 中
   Future<void> _handleSyncFlow() async {
+    // 手机震动一下，给用户反馈
+    HapticFeedback.mediumImpact();
+
     setState(() => _isSyncing = true);
 
     try {
@@ -158,7 +178,7 @@ class _shoeInfo_UserViewState extends State<shoeInfo_UserView> {
         return;
       }
 
-      final resultData = checkResult as Map<String, dynamic>;
+      final resultData = checkResult;
       // 使用 ?? [] 确保即使后端没传这个字段，也会得到一个空列表而不是 null
       List activities = resultData['activities'] ?? [];
       int count = resultData['count'] ?? 0;
