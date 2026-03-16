@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shoecloud/api/shoeInfo.dart';
 import 'package:shoecloud/components/Home/addNewShoe/editFormField.dart';
-import 'package:shoecloud/components/Home/addNewShoe/shoeInfo_Add/bindNFCBottom.dart';
 import 'package:shoecloud/stores/userController.dart';
 
 class shoeEditView extends StatefulWidget {

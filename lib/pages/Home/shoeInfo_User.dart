@@ -337,7 +337,7 @@ class _shoeInfo_UserViewState extends State<shoeInfo_UserView> {
         content: Text(msg, style: const TextStyle(color: Colors.white)),
         behavior: SnackBarBehavior.floating,
         backgroundColor: const Color(0xFF2E7D32),
-        duration: const Duration(seconds: 2),
+        duration: const Duration(seconds: 1),
         margin: const EdgeInsets.fromLTRB(
           20,
           0,
