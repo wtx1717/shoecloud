@@ -72,6 +72,7 @@ class _shoeEditViewState extends State<shoeEditView> {
           Expanded(
             child: ListView(
               padding: const EdgeInsets.symmetric(horizontal: 20),
+              physics: const BouncingScrollPhysics(),
               children: [
                 const SizedBox(height: 20),
                 _buildHeaderTip(),
@@ -96,7 +97,6 @@ class _shoeEditViewState extends State<shoeEditView> {
               ],
             ),
           ),
-          // 底部操作区：直接平铺两个组件
           _buildBottomActionArea(),
         ],
       ),
@@ -105,19 +105,24 @@ class _shoeEditViewState extends State<shoeEditView> {
 
   Widget _buildHeaderTip() {
     return Container(
-      padding: const EdgeInsets.all(15),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.5),
-        borderRadius: BorderRadius.circular(15),
+        color: Colors.white.withOpacity(0.7),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: const Color(0xFFC8E6C9), width: 1),
       ),
       child: const Row(
         children: [
-          Icon(Icons.edit_note, color: Color(0xFF2E7D32)),
-          SizedBox(width: 10),
+          Icon(Icons.tips_and_updates_rounded, color: Color(0xFF2E7D32)),
+          SizedBox(width: 12),
           Expanded(
             child: Text(
               "您可以设置个性化的昵称和尺码，方便后续进行跑量统计。",
-              style: TextStyle(fontSize: 12, color: Color(0xFF2E7D32)),
+              style: TextStyle(
+                fontSize: 13,
+                color: Color(0xFF2E7D32),
+                height: 1.4,
+              ),
             ),
           ),
         ],
@@ -125,48 +130,53 @@ class _shoeEditViewState extends State<shoeEditView> {
     );
   }
 
-  // 核心修改：平铺显示所有操作
   Widget _buildBottomActionArea() {
     return SafeArea(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // 1. 直接显示 NFC 绑定组件（带它自己的 UI 和逻辑）
-          bindNFCBottom(
-            shoeId:
-                (_userController.fullInfo.value!.accountSummary.shoesCount + 1)
-                    .toString(),
-            userId: _userController.loginInfo.value.userId,
-          ),
-
-          // 2. 下方紧跟“仅添加不绑定”按钮
+          // bindNFCBottom(
+          //   // 这里传入一个临时的 ID
+          //   shoeId: (DateTime.now().millisecondsSinceEpoch).toString(),
+          //   userId: _userController.loginInfo.value.userId,
+          //   // 关键：点击写入成功后，会自动触发这个 handle
+          //   onSuccess: _handlePureAdd,
+          // ),
+          // 2. 统一风格的“仅添加不绑定”按钮
           Padding(
-            padding: const EdgeInsets.fromLTRB(
-              25,
-              0,
-              25,
-              20,
-            ), // 调整边距，让它在 NFC 组件下方
-            child: GestureDetector(
+            padding: const EdgeInsets.fromLTRB(25, 0, 25, 20),
+            child: InkWell(
               onTap: _handlePureAdd,
+              borderRadius: BorderRadius.circular(20),
               child: Container(
                 height: 55,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: const Color(0xFFC8E6C9).withOpacity(0.5), // 浅绿半透明背景
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: const Color(0xFF2E7D32),
+                    color: const Color(0xFF2E7D32).withOpacity(0.5),
                     width: 1.5,
                   ),
                 ),
-                child: const Text(
-                  "仅添加不绑定",
-                  style: TextStyle(
-                    color: Color(0xFF2E7D32),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.cloud_upload_outlined,
+                      color: Color(0xFF2E7D32),
+                      size: 20,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      "添加该跑鞋",
+                      style: TextStyle(
+                        color: Color(0xFF2E7D32),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -182,7 +192,8 @@ class _shoeEditViewState extends State<shoeEditView> {
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final rawName = args?['name'] ?? "未知型号";
 
-    final String newShoeId = ShoeUpdateUtils.generateShoeId();
+    // 注意：假设你有生成 ID 的工具类，如果没有请替换为你的逻辑
+    final String newShoeId = DateTime.now().millisecondsSinceEpoch.toString();
 
     final Map<String, dynamic> fullDetail = {
       "code": "1",
@@ -219,37 +230,94 @@ class _shoeEditViewState extends State<shoeEditView> {
     );
 
     if (isSuccess) {
-      showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("添加成功"),
-            content: const Text("您的新跑鞋已成功同步至云端！"),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(), // 关闭弹窗
-                child: const Text("好的"),
-              ),
-            ],
-          );
-        },
-      ).then((_) async {
-        // 1. 确保内存里的基础数据是最新的
-        await _userController.refreshUserInfo();
-
-        if (mounted) {
-          // 2. 跳转回首页
-          // 因为 pushNamedAndRemoveUntil 会销毁旧的 HomeView 实例
-          // 新的 HomeView 实例会触发新的 initState，从而触发新的数据加载
-          Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
-        }
-      });
+      _showSuccessDialog(); // 调用统一风格的成功弹窗
     } else {
-      // 失败逻辑保持不变
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("同步失败，请检查网络")));
+      Get.snackbar(
+        "同步失败",
+        "请检查网络连接",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.redAccent.withOpacity(0.1),
+        colorText: Colors.red,
+      );
     }
+  }
+
+  // --- 统一风格的成功确认弹窗 ---
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false, // 强制用户点击按钮
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          backgroundColor: const Color(0xFFE8F5E9),
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF2E7D32),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.check_rounded,
+                    size: 40,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  "添加成功",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF2E7D32),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  "您的新跑鞋已成功同步至云端！\n准备好开始下一次奔跑了吗？",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.grey, height: 1.5),
+                ),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      Navigator.of(context).pop();
+                      await _userController.refreshUserInfo();
+                      if (mounted) {
+                        Navigator.of(
+                          context,
+                        ).pushNamedAndRemoveUntil('/', (route) => false);
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF2E7D32),
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                    ),
+                    child: const Text(
+                      "好 的",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }

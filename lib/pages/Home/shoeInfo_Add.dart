@@ -14,7 +14,7 @@ class shoeInfo_AddView extends StatefulWidget {
 class _shoeInfo_AddViewState extends State<shoeInfo_AddView> {
   @override
   Widget build(BuildContext context) {
-    // 原生方式获取路由参数
+    // 获取路由参数
     final args =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
 
@@ -109,6 +109,8 @@ class _shoeInfo_AddViewState extends State<shoeInfo_AddView> {
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF2E7D32),
+            foregroundColor: Colors.white,
+            elevation: 0,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
@@ -116,53 +118,119 @@ class _shoeInfo_AddViewState extends State<shoeInfo_AddView> {
           onPressed: () => _showConfirmDialog(args),
           child: const Text(
             "添加该跑鞋",
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
         ),
       ),
     );
   }
 
-  // 关键修改：弹窗中使用 clickableWrapper
+  // --- 重构后的 UI 统一风格弹窗 ---
   void _showConfirmDialog(Map<String, dynamic> args) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-        title: const Text(
-          "确认添加",
-          style: TextStyle(
-            color: Color(0xFF2E7D32),
-            fontWeight: FontWeight.bold,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
           ),
-        ),
-        content: Text("确定要将 ${args['name']} 加入您的鞋库吗？"),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("再想想", style: TextStyle(color: Colors.grey)),
-          ),
-          // 使用你封装的跳转组件
-          clickableWrapper(
-            route: "shoeEditView",
-            arguments: args, // 确保你的 wrapper 支持传参
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              child: Text(
-                "去编辑",
-                style: TextStyle(
-                  color: Color(0xFF2E7D32),
-                  fontWeight: FontWeight.bold,
+          backgroundColor: const Color(0xFFE8F5E9), // 浅绿背景
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min, // 自适应内容高度
+              children: [
+                // 顶部图标装饰：森林绿圆底
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFFC8E6C9), // 浅绿圆底
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.add_shopping_cart_rounded,
+                    size: 40,
+                    color: Color(0xFF2E7D32),
+                  ),
                 ),
-              ),
+                const SizedBox(height: 20),
+
+                // 标题
+                const Text(
+                  "确认添加",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF2E7D32),
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                // 描述文字
+                RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    style: const TextStyle(color: Colors.grey, height: 1.5),
+                    children: [
+                      const TextSpan(text: "确定要将 "),
+                      TextSpan(
+                        text: "${args['name']}",
+                        style: const TextStyle(
+                          color: Color(0xFF2E7D32),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const TextSpan(text: "\n加入您的鞋库吗？"),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+
+                // 确认按钮 (使用包装的 clickableWrapper)
+                SizedBox(
+                  width: double.infinity,
+                  child: clickableWrapper(
+                    route: "shoeEditView",
+                    arguments: args,
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF2E7D32),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "去编辑",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 8),
+
+                // 取消按钮
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  style: TextButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 45),
+                  ),
+                  child: const Text(
+                    "再想想",
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

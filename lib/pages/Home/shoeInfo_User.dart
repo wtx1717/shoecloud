@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:shoecloud/api/shoeInfo.dart'; // 确保导入了 getSingleShoeByIdAPI
+import 'package:shoecloud/api/shoeInfo.dart';
 import 'package:shoecloud/api/syncActivity.dart';
 import 'package:shoecloud/components/Home/addNewShoe/shoeInfo_Add/bindNFCBottom.dart';
 import 'package:shoecloud/components/Home/shoeInfo_user/activitySelectionSheet.dart';
@@ -25,68 +25,49 @@ class _shoeInfo_UserViewState extends State<shoeInfo_UserView> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
   bool _isSyncing = false;
-  bool _hasAutoSynced = false; // 状态锁，防止页面刷新时重复触发
+  bool _hasAutoSynced = false;
 
-  ShoeInfo? _currentShoe; // 用于管理当前显示的鞋子数据
+  ShoeInfo? _currentShoe;
   bool _isInitialized = false;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
     if (!_isInitialized) {
       final args =
           ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
       _currentShoe = args?['shoeInfo'] as ShoeInfo?;
 
-      // --- 伟大的一步：检测 NFC 信号并自动同步 ---
       bool fromNfc = args?['fromNfc'] ?? false;
-
       if (fromNfc && !_hasAutoSynced) {
         _hasAutoSynced = true;
-
-        // 使用 PostFrameCallback 确保页面 UI 渲染完再弹窗，避免 context 报错
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          // 增加一点仪式感提示
           _showSafeToast("NFC 感应成功，正在检查运动记录...");
-          _handleSyncFlow(); // 执行我们写好的同步大逻辑
+          _handleSyncFlow();
         });
       }
-
       _isInitialized = true;
     }
   }
 
-  // 下拉刷新的核心逻辑
   Future<void> _handleRefresh() async {
     if (_currentShoe == null) return;
-
-    // 1. 调用单条查询接口（自带时间戳，破除缓存）
     final updatedData = await getSingleShoeByIdAPI(_currentShoe!.shoeId);
-
     if (updatedData != null) {
       setState(() {
         _currentShoe = updatedData;
       });
-      // 2. 同时静默刷新全局列表，确保回到首页也是新的
       await _userController.refreshUserInfo();
-    } else {
-      Get.snackbar("提示", "获取最新数据失败，请检查网络", snackPosition: SnackPosition.BOTTOM);
     }
   }
 
-  // 跳转编辑页并监听返回
   void _navigateToEdit() async {
-    // 这里的 result 就是我们在编辑页 pop(true) 传回来的值
     final result = await Navigator.pushNamed(
       context,
       '/shoe_edit',
       arguments: {'shoeInfo': _currentShoe},
     );
-
-    // 如果编辑页告诉我们要刷新，或者返回了 true
     if (result == true) {
-      // 自动触发下拉刷新动画
       _refreshIndicatorKey.currentState?.show();
     }
   }
@@ -121,14 +102,12 @@ class _shoeInfo_UserViewState extends State<shoeInfo_UserView> {
         centerTitle: true,
         iconTheme: const IconThemeData(color: Color(0xFF2E7D32)),
       ),
-      // --- 下拉刷新组件 ---
       body: RefreshIndicator(
         key: _refreshIndicatorKey,
         onRefresh: _handleRefresh,
         color: const Color(0xFF2E7D32),
         backgroundColor: Colors.white,
         child: SingleChildScrollView(
-          // 关键：必须使用 AlwaysScrollableScrollPhysics 确保内容较少时也能下拉
           physics: const AlwaysScrollableScrollPhysics(
             parent: BouncingScrollPhysics(),
           ),
@@ -138,13 +117,8 @@ class _shoeInfo_UserViewState extends State<shoeInfo_UserView> {
               shoeStatsGrid(shoe: _currentShoe!),
               shoeFeatureTags(features: _currentShoe!.features),
               shoeDetailList(shoe: _currentShoe!),
-
-              SizedBox(height: 30),
-              syncActionCard(
-                isLoading: _isSyncing, // 你可以在 State 里定义一个 bool 变量
-                onTap: _handleSyncFlow,
-              ),
-
+              const SizedBox(height: 30),
+              syncActionCard(isLoading: _isSyncing, onTap: _handleSyncFlow),
               const SizedBox(height: 30),
               bindNFCBottom(
                 shoeId: _currentShoe!.shoeId,
@@ -158,11 +132,8 @@ class _shoeInfo_UserViewState extends State<shoeInfo_UserView> {
     );
   }
 
-  // 在 _shoeInfo_UserViewState 中
   Future<void> _handleSyncFlow() async {
-    // 手机震动一下，给用户反馈
     HapticFeedback.mediumImpact();
-
     setState(() => _isSyncing = true);
 
     try {
@@ -170,27 +141,23 @@ class _shoeInfo_UserViewState extends State<shoeInfo_UserView> {
       final String shoeId = _currentShoe!.shoeId;
 
       final checkResult = await checkPendingActivitiesAPI(userId: userId);
-      print("后端原始返回: $checkResult");
 
-      // --- 关键防御性代码 ---
       if (checkResult == null) {
-        _showSafeToast("网络请求失败");
+        _showSafeToast("网络连接异常，请重试");
         return;
       }
 
-      final resultData = checkResult;
-      // 使用 ?? [] 确保即使后端没传这个字段，也会得到一个空列表而不是 null
-      List activities = resultData['activities'] ?? [];
-      int count = resultData['count'] ?? 0;
+      List activities = checkResult['activities'] ?? [];
+      int count = checkResult['count'] ?? 0;
 
       if (count == 0 || activities.isEmpty) {
-        _showSimpleAlert("暂无活动", "当前目录下没有发现待同步的活动文件。");
+        _showNoActivityStatus();
         return;
       }
 
       if (count == 1) {
-        // 单个文件同步
-        final String fileName = activities[0]['file_name']; // 注意这里现在是 Map 结构了
+        // 单个活动同步：保留仪式感弹窗
+        final String fileName = activities[0]['file_name'];
         final syncRes = await moveSingleActivityAPI(
           userId: userId,
           shoeId: shoeId,
@@ -198,65 +165,186 @@ class _shoeInfo_UserViewState extends State<shoeInfo_UserView> {
         );
 
         if (syncRes != null) {
-          _showSafeToast("同步成功！");
+          _showSyncSuccessUI();
           await _handleRefresh();
         }
       } else {
-        // 多个文件，弹出我们新写的那个 Sheet
+        // 多个活动：进入连续同步模式
         _showMultiActivitiesDialog(activities);
       }
     } catch (e) {
-      print("同步逻辑报错: $e");
       _showSafeToast("发生错误: $e");
     } finally {
       setState(() => _isSyncing = false);
     }
   }
 
-  // 简单的警告弹窗封装
-  void _showSimpleAlert(String title, String content) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        title: Text(title),
-        content: Text(content),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text("好"),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // 封装的大弹窗逻辑
   void _showMultiActivitiesDialog(List activities) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true, // 允许高度自定义
-      backgroundColor: Colors.transparent, // 配合组件的圆角
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
       builder: (context) => ActivitySelectionSheet(
         activities: activities,
         onSync: (fileName) async {
-          // 这里的逻辑和你单文件同步一模一样
           final syncRes = await moveSingleActivityAPI(
             userId: _userController.fullInfo.value!.baseInfo.userId,
             shoeId: _currentShoe!.shoeId,
             fileName: fileName,
           );
           if (syncRes != null) {
-            _showSafeToast("活动已同步！");
-            _handleRefresh(); // 刷新页面数据
+            // --- 核心优化逻辑 ---
+            // 多选模式下不弹出 Dialog 遮挡，而是用 Toast 告知结果，并静默刷新列表
+            HapticFeedback.lightImpact();
+            _showSafeToast("已同步活动：$fileName");
+            _handleRefresh();
           }
         },
       ),
     );
   }
 
-  // 之前封装的简单提示
+  // --- 风格对齐：暂无活动弹窗 ---
+  void _showNoActivityStatus() {
+    showDialog(
+      context: context,
+      builder: (ctx) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        backgroundColor: const Color(0xFFE8F5E9),
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: const BoxDecoration(
+                  color: Color(0xFFFFF9C4),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.cloud_off_rounded,
+                  size: 40,
+                  color: Color(0xFF2E7D32),
+                ),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                "暂无待处理记录",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF2E7D32),
+                ),
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                "服务器中没有发现您的运动记录\n请确认运动已结束并上传",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.grey, height: 1.5),
+              ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF2E7D32),
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                  child: const Text("好 的"),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // --- 风格对齐：同步成功弹窗 (用于单次同步) ---
+  void _showSyncSuccessUI() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+        backgroundColor: const Color(0xFFE8F5E9),
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: const BoxDecoration(
+                  color: Color(0xFFFFF9C4),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.check_circle_rounded,
+                  size: 40,
+                  color: Color(0xFF2E7D32),
+                ),
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                "同步成功",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF2E7D32),
+                ),
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                "运动数据已成功记录\n跑鞋寿命已为您实时更新",
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.grey, height: 1.5),
+              ),
+              const SizedBox(height: 24),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF2E7D32),
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                  child: const Text("太 棒 了"),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   void _showSafeToast(String msg) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(msg, style: const TextStyle(color: Colors.white)),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: const Color(0xFF2E7D32),
+        duration: const Duration(seconds: 2),
+        margin: const EdgeInsets.fromLTRB(
+          20,
+          0,
+          20,
+          40,
+        ), // 让 Toast 飘得高一点，避免挡住底栏操作
+      ),
+    );
   }
 }
