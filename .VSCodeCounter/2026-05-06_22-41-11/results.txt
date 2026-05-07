@@ -1,0 +1,142 @@
+Date : 2026-05-06 22:41:11
+Directory : d:\shoecloud\lib
+Total : 58 files,  4580 codes, 59 comments, 486 blanks, all 5125 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Dart     |         57 |      4,321 |         59 |        435 |      4,815 |
+| Markdown |          1 |        259 |          0 |         51 |        310 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                   | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                      |         58 |      4,580 |         59 |        486 |      5,125 |
+| . (Files)                                                                              |          2 |        267 |          1 |         53 |        321 |
+| app                                                                                    |          5 |        183 |          5 |         14 |        202 |
+| app (Files)                                                                            |          2 |         46 |          2 |          7 |         55 |
+| app\router                                                                             |          2 |         50 |          2 |          3 |         55 |
+| app\theme                                                                              |          1 |         87 |          1 |          4 |         92 |
+| core                                                                                   |          5 |        213 |          7 |         43 |        263 |
+| core\constants                                                                         |          1 |         20 |          1 |          2 |         23 |
+| core\network                                                                           |          1 |         52 |          1 |          9 |         62 |
+| core\nfc                                                                               |          2 |        109 |          4 |         25 |        138 |
+| core\storage                                                                           |          1 |         32 |          1 |          7 |         40 |
+| features                                                                               |         40 |      3,710 |         40 |        348 |      4,098 |
+| features\activities                                                                    |          1 |         33 |          1 |          3 |         37 |
+| features\activities\models                                                             |          1 |         33 |          1 |          3 |         37 |
+| features\auth                                                                          |          3 |        219 |          3 |         23 |        245 |
+| features\auth\data                                                                     |          1 |         29 |          1 |          6 |         36 |
+| features\auth\presentation                                                             |          2 |        190 |          2 |         17 |        209 |
+| features\auth\presentation\controllers                                                 |          1 |         30 |          1 |          6 |         37 |
+| features\auth\presentation\pages                                                       |          1 |        160 |          1 |         11 |        172 |
+| features\common                                                                        |          1 |         20 |          1 |          4 |         25 |
+| features\common\presentation                                                           |          1 |         20 |          1 |          4 |         25 |
+| features\common\presentation\pages                                                     |          1 |         20 |          1 |          4 |         25 |
+| features\home                                                                          |          5 |        295 |          5 |         29 |        329 |
+| features\home\presentation                                                             |          5 |        295 |          5 |         29 |        329 |
+| features\home\presentation\controllers                                                 |          1 |         31 |          1 |          7 |         39 |
+| features\home\presentation\pages                                                       |          1 |         64 |          1 |          7 |         72 |
+| features\home\presentation\widgets                                                     |          3 |        200 |          3 |         15 |        218 |
+| features\main                                                                          |          1 |        102 |          1 |         12 |        115 |
+| features\main\presentation                                                             |          1 |        102 |          1 |         12 |        115 |
+| features\main\presentation\pages                                                       |          1 |        102 |          1 |         12 |        115 |
+| features\privacy                                                                       |          2 |        142 |          2 |         14 |        158 |
+| features\privacy\presentation                                                          |          2 |        142 |          2 |         14 |        158 |
+| features\privacy\presentation\pages                                                    |          1 |         48 |          1 |          5 |         54 |
+| features\privacy\presentation\widgets                                                  |          1 |         94 |          1 |          9 |        104 |
+| features\profile                                                                       |          5 |        740 |          5 |         46 |        791 |
+| features\profile\domain                                                                |          1 |         66 |          1 |          9 |         76 |
+| features\profile\presentation                                                          |          4 |        674 |          4 |         37 |        715 |
+| features\profile\presentation\pages                                                    |          2 |        451 |          2 |         25 |        478 |
+| features\profile\presentation\widgets                                                  |          2 |        223 |          2 |         12 |        237 |
+| features\session                                                                       |          2 |         90 |          2 |         19 |        111 |
+| features\session\models                                                                |          1 |         33 |          1 |          5 |         39 |
+| features\session\presentation                                                          |          1 |         57 |          1 |         14 |         72 |
+| features\session\presentation\controllers                                              |          1 |         57 |          1 |         14 |         72 |
+| features\shoes                                                                         |         16 |      1,729 |         16 |        158 |      1,903 |
+| features\shoes\data                                                                    |          1 |        158 |          1 |         23 |        182 |
+| features\shoes\domain                                                                  |          1 |        103 |          1 |         18 |        122 |
+| features\shoes\models                                                                  |          2 |        149 |          2 |         10 |        161 |
+| features\shoes\presentation                                                            |         12 |      1,319 |         12 |        107 |      1,438 |
+| features\shoes\presentation\pages                                                      |          6 |        727 |          6 |         67 |        800 |
+| features\shoes\presentation\widgets                                                    |          6 |        592 |          6 |         40 |        638 |
+| features\social                                                                        |          2 |        108 |          2 |          7 |        117 |
+| features\social\presentation                                                           |          2 |        108 |          2 |          7 |        117 |
+| features\social\presentation\pages                                                     |          1 |         42 |          1 |          3 |         46 |
+| features\social\presentation\widgets                                                   |          1 |         66 |          1 |          4 |         71 |
+| features\user                                                                          |          2 |        232 |          2 |         33 |        267 |
+| features\user\data                                                                     |          1 |         24 |          1 |          5 |         30 |
+| features\user\models                                                                   |          1 |        208 |          1 |         28 |        237 |
+| shared                                                                                 |          6 |        207 |          6 |         28 |        241 |
+| shared\utils                                                                           |          1 |         39 |          1 |          7 |         47 |
+| shared\widgets                                                                         |          5 |        168 |          5 |         21 |        194 |
++----------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                               | language | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| d:\shoecloud\lib\README.md                                                             | Markdown |        259 |          0 |         51 |        310 |
+| d:\shoecloud\lib\app\app_bootstrap.dart                                                | Dart     |         28 |          1 |          4 |         33 |
+| d:\shoecloud\lib\app\router\app_pages.dart                                             | Dart     |         37 |          1 |          2 |         40 |
+| d:\shoecloud\lib\app\router\app_routes.dart                                            | Dart     |         13 |          1 |          1 |         15 |
+| d:\shoecloud\lib\app\shoecloud_app.dart                                                | Dart     |         18 |          1 |          3 |         22 |
+| d:\shoecloud\lib\app\theme\app_theme.dart                                              | Dart     |         87 |          1 |          4 |         92 |
+| d:\shoecloud\lib\core\constants\app_constants.dart                                     | Dart     |         20 |          1 |          2 |         23 |
+| d:\shoecloud\lib\core\network\api_client.dart                                          | Dart     |         52 |          1 |          9 |         62 |
+| d:\shoecloud\lib\core\nfc\deep_link_nfc_manager.dart                                   | Dart     |         48 |          1 |         13 |         62 |
+| d:\shoecloud\lib\core\nfc\nfc_writer.dart                                              | Dart     |         61 |          3 |         12 |         76 |
+| d:\shoecloud\lib\core\storage\session_storage.dart                                     | Dart     |         32 |          1 |          7 |         40 |
+| d:\shoecloud\lib\features\activities\models\shoe_activity.dart                         | Dart     |         33 |          1 |          3 |         37 |
+| d:\shoecloud\lib\features\auth\data\auth_repository.dart                               | Dart     |         29 |          1 |          6 |         36 |
+| d:\shoecloud\lib\features\auth\presentation\controllers\auth_controller.dart           | Dart     |         30 |          1 |          6 |         37 |
+| d:\shoecloud\lib\features\auth\presentation\pages\login_page.dart                      | Dart     |        160 |          1 |         11 |        172 |
+| d:\shoecloud\lib\features\common\presentation\pages\coming_soon_page.dart              | Dart     |         20 |          1 |          4 |         25 |
+| d:\shoecloud\lib\features\home\presentation\controllers\home_controller.dart           | Dart     |         31 |          1 |          7 |         39 |
+| d:\shoecloud\lib\features\home\presentation\pages\home_page.dart                       | Dart     |         64 |          1 |          7 |         72 |
+| d:\shoecloud\lib\features\home\presentation\widgets\add_shoe_entry_button.dart         | Dart     |         52 |          1 |          5 |         58 |
+| d:\shoecloud\lib\features\home\presentation\widgets\home_header.dart                   | Dart     |         40 |          1 |          3 |         44 |
+| d:\shoecloud\lib\features\home\presentation\widgets\shoe_overview_card.dart            | Dart     |        108 |          1 |          7 |        116 |
+| d:\shoecloud\lib\features\main\presentation\pages\main_page.dart                       | Dart     |        102 |          1 |         12 |        115 |
+| d:\shoecloud\lib\features\privacy\presentation\pages\privacy_page.dart                 | Dart     |         48 |          1 |          5 |         54 |
+| d:\shoecloud\lib\features\privacy\presentation\widgets\policy_content.dart             | Dart     |         94 |          1 |          9 |        104 |
+| d:\shoecloud\lib\features\profile\domain\profile_service.dart                          | Dart     |         66 |          1 |          9 |         76 |
+| d:\shoecloud\lib\features\profile\presentation\pages\profile_edit_page.dart            | Dart     |        321 |          1 |         19 |        341 |
+| d:\shoecloud\lib\features\profile\presentation\pages\profile_page.dart                 | Dart     |        130 |          1 |          6 |        137 |
+| d:\shoecloud\lib\features\profile\presentation\widgets\feature_tile.dart               | Dart     |         64 |          1 |          4 |         69 |
+| d:\shoecloud\lib\features\profile\presentation\widgets\profile_header.dart             | Dart     |        159 |          1 |          8 |        168 |
+| d:\shoecloud\lib\features\session\models\user_login.dart                               | Dart     |         33 |          1 |          5 |         39 |
+| d:\shoecloud\lib\features\session\presentation\controllers\app_session_controller.dart | Dart     |         57 |          1 |         14 |         72 |
+| d:\shoecloud\lib\features\shoes\data\shoe_repository.dart                              | Dart     |        158 |          1 |         23 |        182 |
+| d:\shoecloud\lib\features\shoes\domain\shoe_service.dart                               | Dart     |        103 |          1 |         18 |        122 |
+| d:\shoecloud\lib\features\shoes\models\shoe.dart                                       | Dart     |        114 |          1 |          7 |        122 |
+| d:\shoecloud\lib\features\shoes\models\shoe_catalog_item.dart                          | Dart     |         35 |          1 |          3 |         39 |
+| d:\shoecloud\lib\features\shoes\presentation\pages\shoe_activities_page.dart           | Dart     |        163 |          1 |         13 |        177 |
+| d:\shoecloud\lib\features\shoes\presentation\pages\shoe_catalog_detail_page.dart       | Dart     |         74 |          1 |          4 |         79 |
+| d:\shoecloud\lib\features\shoes\presentation\pages\shoe_catalog_page.dart              | Dart     |         80 |          1 |          7 |         88 |
+| d:\shoecloud\lib\features\shoes\presentation\pages\shoe_create_page.dart               | Dart     |        108 |          1 |         11 |        120 |
+| d:\shoecloud\lib\features\shoes\presentation\pages\shoe_detail_page.dart               | Dart     |        135 |          1 |         19 |        155 |
+| d:\shoecloud\lib\features\shoes\presentation\pages\shoe_edit_page.dart                 | Dart     |        167 |          1 |         13 |        181 |
+| d:\shoecloud\lib\features\shoes\presentation\widgets\activity_selection_sheet.dart     | Dart     |        124 |          1 |          8 |        133 |
+| d:\shoecloud\lib\features\shoes\presentation\widgets\nfc_bind_button.dart              | Dart     |        122 |          1 |          7 |        130 |
+| d:\shoecloud\lib\features\shoes\presentation\widgets\shoe_detail_header.dart           | Dart     |         82 |          1 |          4 |         87 |
+| d:\shoecloud\lib\features\shoes\presentation\widgets\shoe_detail_list.dart             | Dart     |        129 |          1 |         10 |        140 |
+| d:\shoecloud\lib\features\shoes\presentation\widgets\shoe_stats_card.dart              | Dart     |         69 |          1 |          7 |         77 |
+| d:\shoecloud\lib\features\shoes\presentation\widgets\sync_action_card.dart             | Dart     |         66 |          1 |          4 |         71 |
+| d:\shoecloud\lib\features\social\presentation\pages\social_page.dart                   | Dart     |         42 |          1 |          3 |         46 |
+| d:\shoecloud\lib\features\social\presentation\widgets\social_card.dart                 | Dart     |         66 |          1 |          4 |         71 |
+| d:\shoecloud\lib\features\user\data\user_repository.dart                               | Dart     |         24 |          1 |          5 |         30 |
+| d:\shoecloud\lib\features\user\models\user_profile.dart                                | Dart     |        208 |          1 |         28 |        237 |
+| d:\shoecloud\lib\main.dart                                                             | Dart     |          8 |          1 |          2 |         11 |
+| d:\shoecloud\lib\shared\utils\time_formatter.dart                                      | Dart     |         39 |          1 |          7 |         47 |
+| d:\shoecloud\lib\shared\widgets\app_card.dart                                          | Dart     |         32 |          1 |          4 |         37 |
+| d:\shoecloud\lib\shared\widgets\app_empty_state.dart                                   | Dart     |         59 |          1 |          4 |         64 |
+| d:\shoecloud\lib\shared\widgets\app_feedback.dart                                      | Dart     |         25 |          1 |          5 |         31 |
+| d:\shoecloud\lib\shared\widgets\app_primary_button.dart                                | Dart     |         28 |          1 |          4 |         33 |
+| d:\shoecloud\lib\shared\widgets\app_shell.dart                                         | Dart     |         24 |          1 |          4 |         29 |
+| Total                                                                                  |          |      4,580 |         59 |        486 |      5,125 |
++----------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
